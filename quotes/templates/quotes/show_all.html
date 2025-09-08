@@ -1,0 +1,11 @@
+{% extends 'quotes/base.html' %}
+{% block content %}
+<ul>
+    {% for quote in quote %}
+            <h3>{{ quote }}</h3>
+    {% endfor %}
+    {% for image in image %}
+            <img src="{{image}}" alt="{{ product_name }}'s image">
+    {% endfor %}
+</ul>
+{% endblock %}

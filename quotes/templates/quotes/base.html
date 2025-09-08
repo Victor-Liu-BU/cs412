@@ -1,0 +1,22 @@
+<!-- quotes/templates/quotes/base.html-->
+
+{% load static %}
+<html>
+    <head>
+        <title>Motivational Quotes</title>
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head>
+    <body>
+        <nav>
+            <li><a href="{% url 'about_page' %}">About</a></li>
+            <li><a href="{% url 'quote_page' %}">Quote</a></li>
+            <li><a href="{% url 'show_all_page' %}">Show All</a></li>
+        </nav>
+        <!-- put page specific content here -->
+         {% block content %}
+         {% endblock %}
+        <footer>
+            This page is about David Goggins and his motivational quotes 
+        </footer>
+    </body>
+</html>
