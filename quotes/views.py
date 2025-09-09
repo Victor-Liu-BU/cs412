@@ -8,6 +8,7 @@ from django.http import HttpRequest, HttpResponse
 import random
 def quote(request):
     """Return and render a random quote and random image from a set list"""
+
     template_name = 'quotes/quote.html'
 
     quote_list = ["“You are in danger of living a life so comfortable and soft, that you will die without ever realizing your true potential.”",
@@ -25,6 +26,7 @@ def quote(request):
 
 def show_all(request):
     """Shows all quotes and images from a set list"""
+    
     template_name = 'quotes/show_all.html'
 
     context = {

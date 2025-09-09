@@ -1,15 +1,15 @@
 <!-- quotes/templates/quotes/show_all.html -->
 <!-- Ting Shing Liu, 9/9/25 -->
 <!-- HTML for the Show All page -->
- 
+
 {% extends 'quotes/base.html' %}
 {% block content %}
     <ul>
         {% for quote in quote %}
-                <h3>{{ quote }}</h3>
+                <p>{{quote}}</p>
         {% endfor %}
         {% for image in image %}
-                <img src="{{image}}" alt="{{ product_name }}'s image">
+                <img src="{{ image }}" alt="{{ product_name }}'s image">
         {% endfor %}
     </ul>
 {% endblock %}

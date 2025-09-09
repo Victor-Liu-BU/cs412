@@ -1,9 +1,9 @@
 <!-- quotes/templates/quotes/quote.html -->
 <!-- Ting Shing Liu, 9/9/25 -->
 <!-- HTML for the quote -->
- 
+
 {% extends 'quotes/base.html' %}
 {% block content %}
-    <p>{{quote}}</p>
-    <img src="{{image}}" alt="{{ product_name }}'s image">
+    <ul>{{quote}}</ul>
+    <img src="{{image}}" alt="{{product_name}}'s image">
 {% endblock %}
