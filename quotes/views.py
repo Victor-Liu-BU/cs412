@@ -1,10 +1,13 @@
 # file: quotes/views.py
+# Author: Ting Shing Liu, 9/9/25
+# Description: views files that contains all of the functions for the quotes app
 
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse
 
 import random
 def quote(request):
+    """Return and render a random quote and random image from a set list"""
     template_name = 'quotes/quote.html'
 
     quote_list = ["“You are in danger of living a life so comfortable and soft, that you will die without ever realizing your true potential.”",
@@ -21,6 +24,7 @@ def quote(request):
     return render(request, template_name, context)
 
 def show_all(request):
+    """Shows all quotes and images from a set list"""
     template_name = 'quotes/show_all.html'
 
     context = {
@@ -35,7 +39,7 @@ def show_all(request):
     return render(request, template_name, context)
 
 def about(request):
-    '''Respond to the URL 'about', delegate work to a template'''
+    """Respond to the URL 'about', delegate work to a template"""
 
     template_name = 'quotes/about.html'
     return render(request, template_name)
