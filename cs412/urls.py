@@ -22,5 +22,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hw/', include("hw.urls")),
-    path('quotes/', include("quotes.urls")),
+    path('quotes/', include("quotes.urls")), 
+    path('formdata/', include("formdata.urls")), # The link with the formdata path will get redirected to the formdata app
+    path('restaurant/', include("restaurant.urls")), # The link with the restaurant path will get redirected to the restaurant app
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

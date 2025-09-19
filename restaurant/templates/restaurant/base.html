@@ -1,0 +1,25 @@
+<!-- restaurant/templates/restaurant/base.html -->
+<!-- Ting Shing Liu, 9/16/25 -->
+<!-- Base page template for the restaurant webpage -->
+
+{% load static %}
+<html>
+    <head>
+        <title>Isshindo Ramen</title>
+        <link rel="stylesheet" href="{% static 'styles_restaurant.css' %}">
+    </head>
+    <body>
+        <nav>
+            <li><a href="{% url 'main_page' %}">Main Page</a></li>
+            <li><a href="{% url 'order_page' %}">Order Page</a></li>
+        </nav>
+        <h1 class="centered-h1">Isshindo Ramen</h1>
+        <!-- put page specific content here -->
+         {% block content %}
+         {% endblock %}
+    </body>        
+    <footer>
+        This page is about Isshindo Ramen and their delicious riches.<br>
+        The current time is {{time}}.
+    </footer>
+</html>

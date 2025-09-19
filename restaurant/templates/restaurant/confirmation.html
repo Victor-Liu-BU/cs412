@@ -1,0 +1,21 @@
+<!-- restaurant/templates/restaurant/confirmation.html -->
+<!-- Ting Shing Liu, 9/16/25 -->
+<!-- Confirmation page template for the restaurant webpage -->
+
+{% extends 'restaurant/base.html' %}
+{% block content %}
+<div class="centered-div">
+    <h1>Confirmation Page</h1>
+    <p>
+        Thank you for your order {{name}}!
+    </p>
+    <h3>Your Order:</h3>
+    <ul>
+        {% for item in ordered_items %}
+        <li>{{item}}</li>
+        {% endfor %}
+    </ul>
+    <h4>Your Total: {{total_price}}</h4>
+    <p>We will contact you at {{ phone_number }} or {{email}} when your order is ready at {{ready_by_time}}.</p>
+</div>
+{% endblock %}

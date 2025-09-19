@@ -1,0 +1,51 @@
+<!-- restaurant/templates/restaurant/main.html -->
+<!-- Ting Shing Liu, 9/16/25 -->
+<!-- Main page template for the restaurant webpage -->
+
+{% extends 'restaurant/base.html' %}
+{% block content %}
+    <div class="centered-div">
+        <br>
+        <h1 class="centered-h1"><b>Welcome!</b></h1>
+        <ul>
+            {% for image in image %}
+                <img src="{{ image }}" alt="{{ product_name }}'s image"></li>
+            {% endfor %}
+            <div class="centered-div">
+            <h2>
+                Location: 1 Brighton Ave #16, Allston, MA 02134
+            </h2>
+            <h2>
+                Open Hours:
+            </h2>
+                <li>
+                    Sunday   11AM-9:30PM
+                </li>
+
+                <li>
+                    Monday   11AM-9:30PM
+                </li>
+
+                <li>
+                    Tuesday  11AM-9:30PM
+                </li>
+
+                <li>
+                    Wednesday 11AM-9:30PM
+                </li>
+
+                <li>
+                    Thursday  11AM-9:30PM
+                </li>
+
+                <li>
+                    Friday    11AM-10PM
+                </li>
+
+                <li>
+                    Saturday  11AM-10PM
+                </li>
+            </div>
+        </ul>
+    </div>
+{% endblock %}

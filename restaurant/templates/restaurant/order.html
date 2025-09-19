@@ -1,0 +1,71 @@
+<!-- restaurant/templates/restaurant/order.html -->
+<!-- Ting Shing Liu, 9/16/25 -->
+<!-- Order page template for the restaurant webpage -->
+
+{% extends 'restaurant/base.html' %}
+{% block content %}
+<div class="centered-div">
+    <h1>Place An Order</h1><br>
+    <h2>Please select your items</h2>
+    <br>
+
+    <form action="{% url 'confirmation_page' %}" method="POST">
+        {% csrf_token %}
+        <div>    
+            <input type="checkbox" name="isshindo_ramen" value = "Isshindo Ramen">
+            <label for="isshindo_ramen"><b>Isshindo Ramen $16</b></label><br>
+            <div class="sub-options">
+                <div>
+                    <input type="checkbox" name="extra_ramen" value = "Extra Ramen">
+                    <label for="extra_ramen"><b>Extra Ramen +$2</b></label><br>
+                </div>
+
+                <div>
+                    <input type="checkbox" name="extra_egg" value="Extra Egg">
+                    <label for="extra_egg"><b>Extra Egg +$1</b></label><br>
+                </div>
+
+                <div>
+                    <input type="checkbox" name="extra_pork" value="Extra Pork">
+                    <label for="extra_pork"><b>Extra Pork +$2</b></label><br>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <input type="checkbox" name="curry" value="Curry">
+            <label for="curry"><b>Curry Rice $5.50</b></label>
+        </div>
+
+        <div>
+            <input type="checkbox" name="beef_sukiyaki" value="Beef Sukiyaki">
+            <label for="beef_sukiyaki"><b>Beef Sukiyaki $5.50</b></label>
+        </div>
+
+        <div>
+            <input type="checkbox" name="chicken_katsu" value="Chicken Katsu">
+            <label for="chicken_katsu"><b>Chicken Katsu $5.50</b></label>
+        </div>
+        <br>
+        <h2>
+            Today's Specials:
+        </h2>
+        
+        <div>
+            <input type="checkbox" name="special" value="{{special}}">
+            <label for="special"><b>{{special}} {{price}}</b></label>
+        </div>
+
+        <div>
+            Name:<br>
+            <input type="text" name="name"><br>
+            Phone Number:<br>
+            <input type="text" name="phone_number"><br>
+            Email:<br>
+            <input type="text" name="email">
+        </div>
+
+        <input type="Submit">
+    </form>
+</div>
+{% endblock %}
