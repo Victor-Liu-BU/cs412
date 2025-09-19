@@ -1,3 +1,7 @@
+/* file: static/styles_restaurant.css
+Author: Ting Shing Liu
+Description: css file for the restaurant app*/
+
 body {
     background-color: #fff;
     color: slategray;
@@ -6,14 +10,14 @@ body {
 
 h1{
     font-weight: normal;
-    background:aliceblue;
     margin: 0;
+    background-color: #fff;
 }
 
 h2{
     font-weight: normal;
-    background: lightblue;
     margin: 0;
+
 }
 
 a, a:visited {
@@ -32,6 +36,8 @@ body {
     max-width: 960px;
     margin: 20px auto;
     padding: 20px auto;
+    /* to ensure that the footer does not cover body content*/
+    padding-bottom: 70px;
 }
 
 header {
@@ -46,12 +52,33 @@ header {
 }
 
 footer {
-    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     background:aliceblue;
     position: fixed;
-    bottom: 0px;
+    bottom: 0;
+    left: 0; /* Add these three lines to properly */
+    right: 0; /* center a fixed element with a */
+    margin: 0 auto; /* max-width. */
+    max-width: 960px; /* Match the body's max-width */
+    padding: 10px 0; /* Add vertical space */
+
 }
 
+/*Centering image*/
+img {
+    display: block;
+    margin: 0 auto;
+}
+
+.centered-h1 {
+    display: block;
+    justify-content: center;
+    text-align: center;
+    background-color: #fff;
+}
 
 .wrapper {              /* centering and margin around whole wrapper element */
     border: 2px solid;
@@ -82,6 +109,19 @@ div.wrapper h2 {
     font-size: 2 em; 
 }
 
+.sub-options {
+    margin-left: 30px;
+    padding-left: 10px;
+    border-left: 2px solid lightgray;
+}
+
+/* Make everything in the div centered*/
+.centered-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
 section {
     border: 2px solid darkblue;    /* border around each event */
@@ -146,11 +186,11 @@ nav button {
     display: table-cell;
    
     padding: 5px;
+    text-align: center;
 }
 
 .mc-table-row .detail img {
     max-height: 75px;
-    align-content: right;
 }
 
 /* must have no space before :hover */
