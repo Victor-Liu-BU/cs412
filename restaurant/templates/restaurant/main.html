@@ -4,10 +4,12 @@
 
 {% extends 'restaurant/base.html' %}
 {% block content %}
+    <!--Made a class for div to make its child content centered-->
     <div class="centered-div">
         <br>
         <h1 class="centered-h1"><b>Welcome!</b></h1>
         <ul>
+            <!--There's two images, so I used a for loop-->
             {% for image in image %}
                 <img src="{{ image }}" alt="{{ product_name }}'s image"></li>
             {% endfor %}
@@ -18,6 +20,7 @@
             <h2>
                 Open Hours:
             </h2>
+                <!--The Operation Hours in a List-->
                 <li>
                     Sunday   11AM-9:30PM
                 </li>

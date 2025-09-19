@@ -8,12 +8,14 @@
     <h1>Place An Order</h1><br>
     <h2>Please select your items</h2>
     <br>
-
+    <!--Passes the information in the form to the confirmation_page-->
     <form action="{% url 'confirmation_page' %}" method="POST">
         {% csrf_token %}
-        <div>    
+        <div>
+            <!--Each item has its name that the function uses for reference and the value that displays the full name-->    
             <input type="checkbox" name="isshindo_ramen" value = "Isshindo Ramen">
             <label for="isshindo_ramen"><b>Isshindo Ramen $16</b></label><br>
+            <!--Sub Div to make it extra indented-->
             <div class="sub-options">
                 <div>
                     <input type="checkbox" name="extra_ramen" value = "Extra Ramen">
@@ -52,6 +54,7 @@
         </h2>
         
         <div>
+            <!--Value gets its "value" from accessing the special key value that is passed in-->
             <input type="checkbox" name="special" value="{{special}}">
             <label for="special"><b>{{special}} {{price}}</b></label>
         </div>
