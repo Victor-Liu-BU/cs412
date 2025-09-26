@@ -15,7 +15,7 @@
             <!--If condition to determine what header is displayed. If in profile, it will display profile username,
             else showing all profiles-->
             {% if profile %}
-            <h1>Mini Insta: {{profile.username}}</h1>
+            <h1>Mini Insta: {{profile.display_name}}</h1>
             {% else %}
             <h1>Mini Insta: Showing All Profiles</h1>
             {% endif %}
