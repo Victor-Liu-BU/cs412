@@ -1,0 +1,37 @@
+<!-- mini_insta/templates/mini_insta/base.html -->
+<!-- Ting Shing Liu, 9/25/25 -->
+<!-- Base page template for the mini insta webpage -->
+
+{% load static %}
+
+<html>
+    <head>
+        <title>Mini Insta</title>
+        <!--Reference to the new css for this app-->
+        <link rel="stylesheet" href="{% static 'styles-mini-insta.css' %}">
+    </head>
+    <body>
+        <head>
+            <!--If condition to determine what header is displayed. If in profile, it will display profile username,
+            else showing all profiles-->
+            {% if profile %}
+            <h1>Mini Insta: {{profile.username}}</h1>
+            {% else %}
+            <h1>Mini Insta: Showing All Profiles</h1>
+            {% endif %}
+        </head>
+
+        {% block content %}
+        {% endblock %}
+    </body>
+    <footer>
+        <!-- Make the navigation in the Footer -->
+        <nav>
+            <ul>
+                <li>
+                    <a href="{% url 'show_all_profiles' %}">Show All Profiles</a>
+                </li>
+            </ul>
+        </nav>
+    </footer>
+</html>

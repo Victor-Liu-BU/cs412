@@ -1,0 +1,22 @@
+<!-- mini_insta/templates/mini_insta/show_all_profiles.html -->
+<!-- Ting Shing Liu, 9/25/25 -->
+<!-- Show All Profiles page template for the mini insta webpage -->
+ 
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<!--{{articles}}-->
+
+<main class="grid-container">
+    <!-- scriplet code for a loop to display all the images with a clickable link-->
+     {% for profile in profiles %}
+    
+    <article>
+        <a href="{% url 'show_profile' profile.pk %}">
+        <img src="{{profile.profile_image_url}}" alt="{{profile.username}}">
+        </a>
+    </article>
+     {% endfor %}
+</main>
+
+{% endblock %}

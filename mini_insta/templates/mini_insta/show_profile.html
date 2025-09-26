@@ -1,0 +1,23 @@
+<!-- mini_insta/templates/mini_insta/show_profile.html -->
+<!-- Ting Shing Liu, 9/25/25 -->
+<!-- Profile page template for the mini insta webpage -->
+ 
+{% extends 'mini_insta/base.html' %}
+{% block content %}
+
+<main class="grid-container">
+    <!-- scriplet code for a loop-->
+     <article>
+        <div>
+            <h2>
+                {{profile.username}}
+            </h2>
+            <p>
+                {{profile.bio_text | linebreaks}}
+            </p>
+        </div>
+        <img src="{{profile.profile_image_url}}" alt="{{profile.username}}">
+        </a>
+    </article>
+</main>
+{% endblock %}
