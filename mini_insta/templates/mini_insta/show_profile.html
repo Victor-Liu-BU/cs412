@@ -5,19 +5,39 @@
 {% extends 'mini_insta/base.html' %}
 {% block content %}
 
-<main class="grid-container">
-    <!-- scriplet code for a loop-->
-     <article>
-        <div>
-            <h2>
-                {{profile.username}}
-            </h2>
-            <p>
-                {{profile.bio_text | linebreaks}}
-            </p>
+<main>
+    <article class="profile-bio">
+        <img class="profile-pic" src="{{profile.profile_image_url}}" alt="{{profile.username}}">
+        
+        <div class="profile-info">
+            <h2>{{profile.username}}</h2>
+            <p>{{profile.bio_text | linebreaks}}</p>
         </div>
-        <img src="{{profile.profile_image_url}}" alt="{{profile.username}}">
-        </a>
+    </article>
+    
+    <article class="posts-section">
+        <h2>Posts</h2>
+        <h3><a href="{% url 'create_comment' profile.pk %}">Create A Post</a></h3>
+        
+        <div class="grid-container">
+            {% for post in profile.get_all_posts %}
+                
+                {% with first_photo=post.get_all_photos.first %}
+                    <div class="grid-item">
+                        <a href="{% url 'show_post' post.pk %}">
+                            {% if first_photo and first_photo.image_url %}
+                                <img src="{{ first_photo.image_url }}" alt="{{ post.caption }}">
+                            {% else %}
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930" alt="No Image">
+                            {% endif %}
+                        </a>
+                    </div>
+                {% endwith %}
+
+            {% endfor %}
+
+        </div>
     </article>
 </main>
+
 {% endblock %}

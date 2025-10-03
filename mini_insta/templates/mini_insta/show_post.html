@@ -1,0 +1,21 @@
+<!-- mini_insta/templates/mini_insta/show_post.html -->
+<!-- Ting Shing Liu, 10/2/25 -->
+<!-- Show Post template for the mini insta webpage -->
+
+{% extends 'mini_insta/base.html' %}
+{% block content %}
+<main class="grid-container">
+    <!-- scriplet code for a loop-->
+     <article>
+        {% for photo in post.get_all_photos %}
+        <img src="{{photo.image_url}}" alt="{{post.caption}}">
+        {% endfor %}
+        <div>
+            <p>
+                {{post.caption}}
+            </p>
+        </div>
+        </a>
+    </article> 
+</main>
+{% endblock %}

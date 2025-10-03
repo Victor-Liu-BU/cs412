@@ -61,7 +61,6 @@ header {
     max-width: 1200px;
     margin: 20px auto;
 }
-
 article.featured {
     grid-column: span 3;
     display: grid; /* nested grid */

@@ -3,7 +3,7 @@
 # Views file for the mini_insta app that describes the Profile classes that will be used in the application
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
-from .models import Profile
+from .models import Profile, Post, Photo
 
 # Create your views here.
 class ProfileListView(ListView):
@@ -19,3 +19,10 @@ class ProfileDetailView(DetailView):
     model = Profile
     template_name = "mini_insta/show_profile.html"
     context_object_name = "profile"
+
+class PostDetailView(DetailView):
+    '''Define a class interited from DetailView to show a single post with details'''
+
+    model = Post
+    template_name = "mini_insta/show_post.html"
+    context_object_name = "post"

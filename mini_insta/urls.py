@@ -4,10 +4,11 @@
 
 from django.urls import path
 from django.conf import settings
-from .views import ProfileListView, ProfileDetailView # imported to display all profiles and each profile's details 
+from .views import * # Import All Views from views.py
 
 # URL patterns specific to the mini insta app:
 urlpatterns = [
     path('', ProfileListView.as_view(), name="show_all_profiles"), # Path to the base page where it displays all profiles 
     path('profile/<int:pk>', ProfileDetailView.as_view(), name="show_profile"), # Path to a unique profile page with their respective id 
+    path('post/<int:pk>', PostDetailView.as_view(), name="show_post"), # Path to a unique post with their respective id 
 ]
