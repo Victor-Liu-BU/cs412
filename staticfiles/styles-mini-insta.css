@@ -1,3 +1,7 @@
+/*static/style-mini-insta.css
+Ting Shing Liu, 10/3/25
+CSS for my mini_insta*/
+
 body {
     margin: 30px;
     background: #d1dedd;
@@ -5,7 +9,6 @@ body {
     padding-bottom: 70px; 
 }
 
-/* ======== NEW: Profile Bio Section Styles ======== */
 .profile-bio {
     max-width: 900px; /* Constrains the width of the bio section */
     margin: 20px auto; /* Centers the container on the page */
@@ -17,22 +20,36 @@ body {
     border-radius: 8px;
 }
 
-/* ======== NEW: Profile Picture Styles ======== */
 .profile-pic {
-    max-width: 200px;  /* Changed from 200px */
-    height: 200px;     /* Changed from 200px */
+    max-width: 200px;  
+    height: 200px;     
     border-radius: 50%;
     border: 4px solid #fff;
     object-fit: cover;
 }
 
-/* ======== NEW: Post Section Container ======== */
 .posts-section {
     max-width: 900px;
     margin: 40px auto; /* Adds space and centers it */
 }
+.post-caption-detail {
+    padding: 15px;
+    background-color: #eee;
+    border-radius: 8px;
+    margin-bottom: 20px; /* Adds space between caption and image grid */
+}
 
-/* Updated Grid Container and Image Styles */
+.post-caption-detail p {
+    margin: 0;
+    color: #262626;
+}
+
+.post-caption-detail .post-timestamp {
+    font-size: 0.8em;
+    color: #8e8e8e;
+    margin-top: 5px;
+}
+
 .grid-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* Creates a 3-column grid */
@@ -65,7 +82,6 @@ body {
     border-radius: 8px;
 }
 
-/* General Styles (Mostly Unchanged) */
 footer {
     position: fixed;
     bottom: 0;
