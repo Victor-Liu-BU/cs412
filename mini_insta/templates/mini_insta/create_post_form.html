@@ -1,0 +1,21 @@
+<!--mini_insta/templates/mini_insta/create_post_form.html-->
+<!--Ting Shing Liu, 10/3/25-->
+<!--Creates the html page for post submission-->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<h1>Create a new Post on {{profile.username}}</h1>
+<form method="POST">
+    {% csrf_token %}
+    <table>
+    {{form.as_table}}
+    </table>
+    <!--Input box to manually insert ONE image url-->
+    Image Url: <input type="text" name="image_url">
+    <!--When the user submits, navigate to the new post-->
+    <input type="submit" name="submit" value="Submit">
+    <!--Navigate back to the profile page on cancel-->
+    <a href="{% url 'show_profile' profile.pk %}">Cancel</a>
+</form>
+{% endblock %}

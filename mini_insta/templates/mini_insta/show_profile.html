@@ -6,6 +6,7 @@
 {% block content %}
 
 <main>
+    <!--CSS classes-->
     <article class="profile-bio">
         <img class="profile-pic" src="{{profile.profile_image_url}}" alt="{{profile.username}}">
         
@@ -17,14 +18,16 @@
     
     <article class="posts-section">
         <h2>Posts</h2>
-        <h3><a href="{% url 'create_comment' profile.pk %}">Create A Post</a></h3>
         
         <div class="grid-container">
+            <!--We need to be able to access the photos in the Photos model but we only have access to the profile database.
+            As such, we will do a for loop to use the get_all_posts method that accesses the posts because profile is foreign key
+            to Post and Post is foreign key to Photo. The .first method gets the first instance of the get_all_photos method-->
             {% for post in profile.get_all_posts %}
-                
                 {% with first_photo=post.get_all_photos.first %}
                     <div class="grid-item">
                         <a href="{% url 'show_post' post.pk %}">
+                            <!--If a photo exist, display it, else show a default no image image-->
                             {% if first_photo and first_photo.image_url %}
                                 <img src="{{ first_photo.image_url }}" alt="{{ post.caption }}">
                             {% else %}
@@ -33,9 +36,7 @@
                         </a>
                     </div>
                 {% endwith %}
-
             {% endfor %}
-
         </div>
     </article>
 </main>

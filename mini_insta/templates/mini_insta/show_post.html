@@ -4,18 +4,25 @@
 
 {% extends 'mini_insta/base.html' %}
 {% block content %}
-<main class="grid-container">
-    <!-- scriplet code for a loop-->
-     <article>
+
+<div class="posts-section">
+
+    <div class="post-caption-detail">
+        <p><strong>{{ post.profile.username }} {{ post.caption }}</strong></p>
+        <!--using the timestamp attribute, style it using the pipeline | with the date method.
+        F stands for full month, j for the day, and Y for the 4 digit year -->
+        <p class="post-timestamp">{{ post.timestamp|date:"F j, Y" }}</p>
+    </div>
+
+    <div class="grid-container">
         {% for photo in post.get_all_photos %}
-        <img src="{{photo.image_url}}" alt="{{post.caption}}">
+            <div class="grid-item">
+                <img src="{{photo.image_url}}" alt="{{post.caption}}">
+            </div>
+        {% empty %}
+            <p>This post has no photos.</p>
         {% endfor %}
-        <div>
-            <p>
-                {{post.caption}}
-            </p>
-        </div>
-        </a>
-    </article> 
-</main>
+    </div>
+
+</div>
 {% endblock %}

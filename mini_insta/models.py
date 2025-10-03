@@ -2,6 +2,7 @@
 # Ting Shing Liu, 9/26/25
 # Creating the profile and Post object with fields that will be stored in the database
 from django.db import models
+from django.urls import reverse 
 
 # Create your models here.
 class Profile(models.Model):
@@ -43,6 +44,10 @@ class Post(models.Model):
         # Use the object manager to retrieve Photos from this Post
         photos = Photo.objects.filter(post=self).order_by("timestamp")
         return photos
+    
+    def get_absolute_url(self):
+        """Return a URL to display one instance of this object """
+        return reverse("show_post", kwargs={'pk':self.pk})
     
 class Photo(models.Model):
     '''Encapsulate the data of the Photo object'''
