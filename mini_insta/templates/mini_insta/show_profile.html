@@ -28,8 +28,8 @@
                     <div class="grid-item">
                         <a href="{% url 'show_post' post.pk %}">
                             <!--If a photo exist, display it, else show a default no image image-->
-                            {% if first_photo and first_photo.image_url %}
-                                <img src="{{ first_photo.image_url }}" alt="{{ post.caption }}">
+                            {% if first_photo and first_photo.get_image_url %}
+                                <img src="{{ first_photo.get_image_url }}" alt="{{ post.caption }}">
                             {% else %}
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930" alt="No Image">
                             {% endif %}
