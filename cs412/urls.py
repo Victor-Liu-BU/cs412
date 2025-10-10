@@ -27,4 +27,6 @@ urlpatterns = [
     path('restaurant/', include("restaurant.urls")), # The link with the restaurant path will get redirected to the restaurant app
     path('blog/', include("blog.urls")), # The link with the blog path will get redirected to the blog app
     path('mini_insta/', include("mini_insta.urls")), # The link with the mini_insta path will get redirected to the mini_insta app
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] 
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

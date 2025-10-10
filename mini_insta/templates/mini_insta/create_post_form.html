@@ -6,13 +6,12 @@
 
 {% block content %}
 <h1>Create a new Post on {{profile.username}}</h1>
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <table>
     {{form.as_table}}
     </table>
-    <!--Input box to manually insert ONE image url-->
-    Image Url: <input type="text" name="image_url">
+    <p>Upload Image: <input type="file" name="image_file" multiple></p>
     <!--When the user submits, navigate to the new post-->
     <input type="submit" name="submit" value="Submit">
     <!--Navigate back to the profile page on cancel-->

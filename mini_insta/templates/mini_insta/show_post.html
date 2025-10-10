@@ -17,7 +17,7 @@
     <div class="grid-container">
         {% for photo in post.get_all_photos %}
             <div class="grid-item">
-                <img src="{{photo.image_url}}" alt="{{post.caption}}">
+                <img src="{{photo.get_image_url}}" alt="{{post.caption}}">
             </div>
         {% empty %}
             <p>This post has no photos.</p>
