@@ -13,4 +13,6 @@ urlpatterns = [
     path('post/<int:pk>', PostDetailView.as_view(), name="show_post"), # Path to a unique post with their respective id 
     path('profile/<int:pk>/create_post', CreatePostView.as_view(), name="create_post"), # Path to the create post form with their respective profile id
     path('profile/<int:pk>/update', UpdateProfileView.as_view(), name="update_profile"), # Path to the update profile form with their respective profile id
+    path('post/<int:pk>/delete', DeletePostView.as_view(), name="delete_post"), # Path that would lead to the profile of the post that was deleted with their respective post id
+    path('post/<int:pk>/update', UpdatePostView.as_view(), name="update_post"), # Path to the update Post form with their respective post id 
 ]

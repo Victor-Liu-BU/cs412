@@ -8,10 +8,12 @@
 <div class="posts-section">
 
     <div class="post-caption-detail">
-        <p><strong>{{ post.profile.username }} {{ post.caption }}</strong></p>
+        <p><strong>{{ post.profile.username }} <br>{{ post.caption }}</strong></p>
         <!--using the timestamp attribute, style it using the pipeline | with the date method.
         F stands for full month, j for the day, and Y for the 4 digit year -->
         <p class="post-timestamp">{{ post.timestamp|date:"F j, Y" }}</p>
+        <a href="{% url 'update_post' post.pk %}">Update</a>
+        <a href="{% url 'delete_post' post.pk %}">Delete</a>
     </div>
 
     <div class="grid-container">

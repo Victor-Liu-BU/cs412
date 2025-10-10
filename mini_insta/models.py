@@ -63,6 +63,8 @@ class Photo(models.Model):
 
     def __str__(self):
         '''Return a string representation of this model instance'''
+        # if image_url exist display image_url text else search for image_file 
+        # If neither exists, display no image text
         if self.image_url:
             return f'Photo from URL for {self.post}'
         elif self.image_file:

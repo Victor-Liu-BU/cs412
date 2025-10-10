@@ -2,9 +2,9 @@
 # Ting Shing Liu, 9/26/25
 # Views file for the mini_insta app that describes the Profile classes that will be used in the application
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Profile, Post, Photo
-from .forms import CreatePostForm, UpdateProfileForm
+from .forms import CreatePostForm, UpdateProfileForm, UpdatePostForm
 from django.urls import reverse
 
 # Create your views here.
@@ -92,3 +92,37 @@ class UpdateProfileView(UpdateView):
     model = Profile
     form_class = UpdateProfileForm
     template_name = 'mini_insta/update_profile_form.html'
+
+class DeletePostView(DeleteView):
+    '''A view to handle the deletion of the Post object'''
+
+    model = Post
+    template_name = "mini_insta/delete_post_form.html"
+
+    def get_context_data(self, **kwargs):
+        # Calling the superclass method 
+        context = super().get_context_data(**kwargs)
+
+        
+        context['profile'] = self.object.profile
+        return context
+    
+    def get_success_url(self):
+        """Return a url to return to after a successful deletion"""
+
+        # find the PK for this post:
+        pk = self.kwargs['pk']
+        # find the Post object:
+        post = Post.objects.get(pk=pk)
+        
+        # find the PK of the profile for which this post is associated to 
+        profile = post.profile
+
+        # return the URL to redirect to:
+        return reverse('show_profile', kwargs={'pk': profile.pk})
+    
+class UpdatePostView(UpdateView):
+    '''A view to handle the update of a Post object'''
+    model = Post
+    form_class = UpdatePostForm
+    template_name = 'mini_insta/update_post_form.html'
