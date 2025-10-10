@@ -1,0 +1,21 @@
+<!-- mini_insta/templates/mini_insta/update_profile_form.html -->
+<!-- Ting Shing Liu, 10/10/25 -->
+<!-- Update Profile Page template for the mini insta webpage -->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+
+<h1>Update Profile for {{profile.username}}</h1>
+<form action="{% url 'update_profile' profile.pk %}" method="POST"
+    enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+    {{form.as_table}}
+    </table>
+    <!--When the user submits, navigate to Updated Profile-->
+    <input type="submit" name="submit" value="Update">
+    <!--Navigate back to the profile page on cancel-->
+    <a href="{% url 'show_profile' profile.pk %}">Cancel</a>
+</form>
+{% endblock %}

@@ -2,9 +2,9 @@
 # Ting Shing Liu, 9/26/25
 # Views file for the mini_insta app that describes the Profile classes that will be used in the application
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Profile, Post, Photo
-from .forms import CreatePostForm
+from .forms import CreatePostForm, UpdateProfileForm
 from django.urls import reverse
 
 # Create your views here.
@@ -86,3 +86,9 @@ class CreatePostView(CreateView):
         # return response
         return response
     
+class UpdateProfileView(UpdateView):
+    '''A view to handle the update of the Profile object'''
+
+    model = Profile
+    form_class = UpdateProfileForm
+    template_name = 'mini_insta/update_profile_form.html'

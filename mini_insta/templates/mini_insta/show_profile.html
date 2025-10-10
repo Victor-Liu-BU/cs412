@@ -15,7 +15,7 @@
             <p>{{profile.bio_text | linebreaks}}</p>
         </div>
     </article>
-    
+    <a href="{% url 'update_profile' profile.pk %}">Update Profile</a>
     <article class="posts-section">
         <h2>Posts</h2>
         
