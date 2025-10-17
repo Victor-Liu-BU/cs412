@@ -31,6 +31,24 @@ class Profile(models.Model):
         '''Return a url to display one instance of this Profile'''
         return reverse("show_profile", kwargs={'pk':self.pk})
     
+    def get_followers(self):
+        '''Return a list of profiles that follow this profile'''
+        followers = Follow.objects.filter(profile=self)
+        return [follow.follower_profile for follow in followers]
+
+    def get_num_followers(self):
+        '''Return the number of followers'''
+        return len(self.get_followers())
+
+    def get_following(self):
+        '''Return a list of profiles that this profile follows'''
+        following = Follow.objects.filter(follower_profile=self)
+        return [follow.profile for follow in following]
+
+    def get_num_following(self):
+        '''Return the number of profiles this profile follows'''
+        return len(self.get_following())
+    
 class Post(models.Model):
     '''Encapsulate the data of the Post object'''
 
@@ -52,6 +70,16 @@ class Post(models.Model):
     def get_absolute_url(self):
         """Return a URL to display one instance of this object """
         return reverse("show_post", kwargs={'pk':self.pk})
+    
+    def get_all_comments(self):
+        '''Return a QuerySet of all Comments associated with this Post'''
+        comments = Comment.objects.filter(post=self)
+        return comments
+    
+    def get_likes(self):
+        '''Return a QuerySet of all Likes on this Post'''
+        likes = Like.objects.filter(post=self)
+        return likes
     
 class Photo(models.Model):
     '''Encapsulate the data of the Photo object'''
@@ -80,4 +108,36 @@ class Photo(models.Model):
         # Return an empty string if no image source is available
         return ''        
         
-            
+class Follow(models.Model):
+    '''Encapsulates the data of the Follow object'''
+
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="profile")
+    follower_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="follower_profile")
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        '''return a string representation of this model instance'''
+        return f'{self.follower_profile.display_name} follows {self.profile.display_name}'
+    
+class Comment(models.Model):
+    '''Encapsulates the data of the Comment object'''
+
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now=True)
+    text = models.TextField(blank=True)
+
+    def __str__(self):
+        '''return a string representation of this model instance'''
+        return f'{self.profile.display_name} commented {self.text}'
+    
+class Like(models.Model):
+    '''Encapsulates the data of the Like object'''
+
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        '''return a string representation of this model instance'''
+        return f'Liked by {self.profile.display_name} and {self.post.get_likes().count()} others'

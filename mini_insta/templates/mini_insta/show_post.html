@@ -8,7 +8,14 @@
 <div class="posts-section">
 
     <div class="post-caption-detail">
-        <p><strong>{{ post.profile.username }} <br>{{ post.caption }}</strong></p>
+        <p><strong>{{ post.profile.username }} 
+
+        <!-- If there are any likes, display the string from the first Like object -->
+        {% if post.get_likes %}
+            <p>{{ post.get_likes.first }}</p>
+        {% endif %}
+            {{ post.caption }}</strong>
+        </p>
         <!--using the timestamp attribute, style it using the pipeline | with the date method.
         F stands for full month, j for the day, and Y for the 4 digit year -->
         <p class="post-timestamp">{{ post.timestamp|date:"F j, Y" }}</p>
@@ -25,6 +32,13 @@
             <p>This post has no photos.</p>
         {% endfor %}
     </div>
-
+    <h3>Comments</h3>
+    <div>
+        {% for comment in post.get_all_comments %}
+            <p>{{comment}}</p>
+        {% empty %}
+            <p>This post has no comments.</p>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

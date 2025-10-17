@@ -1,0 +1,23 @@
+<!-- Ting Shing Liu, 10/17/25 -->
+<!-- Template to show who a profile is following -->
+
+{% extends 'mini_insta/base.html' %}
+{% block content %}
+
+<main>
+    <h2>{{ profile.display_name }} is Following</h2>
+    <div class="profile-list">
+        {% for followed in profile.get_following %}
+        <div class="profile-list-item">
+            <a href="{% url 'show_profile' followed.pk %}">
+                <img class="profile-pic-small" src="{{ followed.profile_image_url }}" alt="{{ followed.username }}">
+                <span>{{ followed.display_name }}</span>
+            </a>
+        </div>
+        {% empty %}
+            <p>Not following anyone yet.</p>
+        {% endfor %}
+    </div>
+</main>
+
+{% endblock %}

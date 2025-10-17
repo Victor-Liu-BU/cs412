@@ -103,7 +103,7 @@ class DeletePostView(DeleteView):
         # Calling the superclass method 
         context = super().get_context_data(**kwargs)
 
-        
+
         context['profile'] = self.object.profile
         return context
     
@@ -126,3 +126,15 @@ class UpdatePostView(UpdateView):
     model = Post
     form_class = UpdatePostForm
     template_name = 'mini_insta/update_post_form.html'
+
+class ShowFollowersDetailView(DetailView):
+    '''A view to show the followers of a Profile'''
+    model = Profile
+    template_name = 'mini_insta/show_followers.html'
+    context_object_name = 'profile'
+
+class ShowFollowingDetailView(DetailView):
+    '''A view to show who a Profile is following'''
+    model = Profile
+    template_name = 'mini_insta/show_following.html'
+    context_object_name = 'profile'

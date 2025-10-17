@@ -12,6 +12,10 @@
         
         <div class="profile-info">
             <h2>{{profile.username}}</h2>
+            <div class="profile-stats">
+                <a href="{% url 'show_followers' profile.pk %}">{{ profile.get_num_followers }} Followers</a>
+                <a href="{% url 'show_following' profile.pk %}">{{ profile.get_num_following }} Following</a>
+            </div>
             <p>{{profile.bio_text | linebreaks}}</p>
             <a href="{% url 'update_profile' profile.pk %}">Update Profile</a>
         </div>

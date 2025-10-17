@@ -15,4 +15,6 @@ urlpatterns = [
     path('profile/<int:pk>/update', UpdateProfileView.as_view(), name="update_profile"), # Path to the update profile form with their respective profile id
     path('post/<int:pk>/delete', DeletePostView.as_view(), name="delete_post"), # Path that would lead to the profile of the post that was deleted with their respective post id
     path('post/<int:pk>/update', UpdatePostView.as_view(), name="update_post"), # Path to the update Post form with their respective post id 
+    path('profile/<int:pk>/followers', ShowFollowersDetailView.as_view(), name='show_followers'), # Path to the followers page
+    path('profile/<int:pk>/following', ShowFollowingDetailView.as_view(), name='show_following'), # Path to the following page
 ]

@@ -1,0 +1,24 @@
+<!-- mini_insta/templates/mini_insta/show_followers.html -->
+<!-- Ting Shing Liu, 10/17/25 -->
+<!-- Show Followers page template for the mini insta webpage -->
+
+{% extends 'mini_insta/base.html' %}
+{% block content %}
+
+<main>
+    <h2>Followers of {{ profile.display_name }}</h2>
+    <div class="profile-list">
+        {% for follower in profile.get_followers %}
+            <div class="profile-list-item">
+                <a href="{% url 'show_profile' follower.pk %}">
+                    <img class="profile-pic-small" src="{{ follower.profile_image_url }}" alt="{{ follower.username }}">
+                    <span>{{ follower.display_name }}</span>
+                </a>
+            </div>
+        {% empty %}
+            <p>No followers yet.</p>
+        {% endfor %}
+    </div>
+</main>
+
+{% endblock %}
