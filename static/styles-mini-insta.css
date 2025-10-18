@@ -1,10 +1,10 @@
 /*static/style-mini-insta.css
-Ting Shing Liu, 10/3/25
+Ting Shing Liu, 10/17/25
 CSS for my mini_insta*/
 
 body {
     margin: 30px;
-    background: #d1dedd;
+    background: #d1dedd; /* Lighter background for a cleaner look */
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding-bottom: 70px; 
 }
@@ -14,6 +14,7 @@ body {
     margin: 20px auto; /* Centers the container on the page */
     padding: 20px;
     background: #eee;
+    border: 1px solid #dbdbdb;
     display: flex; /* Aligns image and text side-by-side */
     align-items: center; /* Vertically centers the content */
     gap: 40px; /* Adds space between the image and the text */
@@ -21,7 +22,7 @@ body {
 }
 
 .profile-pic {
-    max-width: 200px;  
+    max-width: 200px;   
     height: 200px;     
     border-radius: 50%;
     border: 4px solid #fff;
@@ -34,7 +35,8 @@ body {
 }
 .post-caption-detail {
     padding: 15px;
-    background-color: #eee;
+    background-color: #fff;
+    border: 1px solid #dbdbdb;
     border-radius: 8px;
     margin-bottom: 20px; /* Adds space between caption and image grid */
 }
@@ -82,13 +84,73 @@ body {
     border-radius: 8px;
 }
 
+/* New Post Feed Styles */
+.feed-container {
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.post-card {
+    background: #fff;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 12px;
+}
+
+.post-profile-pic {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.post-image {
+    width: 100%;
+    height: auto;
+    border-top: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
+}
+
+.post-content {
+    padding: 12px 16px;
+}
+
+.post-content p {
+    margin: 0 0 8px 0;
+}
+
+.likes-info {
+    font-weight: bold;
+}
+
+.comments-section p {
+    font-size: 0.9em;
+    margin-bottom: 4px;
+}
+
+.post-timestamp {
+    font-size: 0.75em;
+    color: #8e8e8e;
+    text-transform: uppercase;
+}
+
+/* End New Post Feed Styles */
+
 footer {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    background: #767f7e;
-    padding: 20px 0;
+    background: #fff;
+    border-top: 1px solid #dbdbdb;
+    padding: 10px 0;
     z-index: 100;
 }
 
@@ -99,9 +161,10 @@ footer nav ul {
 }
 
 footer nav li a {
-    color: white;
+    color: #262626;
     text-decoration: none;
     font-weight: bold;
+    margin: 0 15px;
 }
 
 ul, li {
@@ -110,17 +173,17 @@ ul, li {
 }
 
 h1, h2, h3 {
-    color: #767f7e;
+    color: #262626;
 }
 
 p {
-    color: #828b82;
+    color: #262626;
 }
 
 header {
     max-width: 1200px;
     margin: 40px auto;
-    border-bottom: 1px solid #bbc7c7;
+    border-bottom: 1px solid #dbdbdb;
 }
 
 nav li {
@@ -135,5 +198,14 @@ nav li {
     }
     .grid-container {
         grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
+    }
+    .feed-container {
+        max-width: 100%;
+        margin: 0;
+    }
+    .post-card {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
     }
 }

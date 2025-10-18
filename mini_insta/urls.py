@@ -17,4 +17,5 @@ urlpatterns = [
     path('post/<int:pk>/update', UpdatePostView.as_view(), name="update_post"), # Path to the update Post form with their respective post id 
     path('profile/<int:pk>/followers', ShowFollowersDetailView.as_view(), name='show_followers'), # Path to the followers page
     path('profile/<int:pk>/following', ShowFollowingDetailView.as_view(), name='show_following'), # Path to the following page
+    path('profile/<int:pk>/feed', PostFeedListView.as_view(), name='show_feed'), # Path to the feed page of profiles followed by the user
 ]

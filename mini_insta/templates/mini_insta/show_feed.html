@@ -1,0 +1,50 @@
+<!-- mini_insta/templates/mini_insta/show_feed.html -->
+<!-- Ting Shing Liu, 10/17/25 -->
+<!-- Template to display the post feed for a user -->
+
+{% extends 'mini_insta/base.html' %}
+{% block content %}
+
+<main class="feed-container">
+    <h2>Post Feed for {{ profile.username }}</h2>
+
+    {% for post in posts %}
+        <article class="post-card">
+            <header class="post-header">
+                <a href="{% url 'show_profile' post.profile.pk %}">
+                    <img class="post-profile-pic" src="{{ post.profile.profile_image_url }}" alt="{{ post.profile.username }}">
+                    <strong>{{ post.profile.display_name }}</strong>
+                </a>
+            </header>
+
+            {% with first_photo=post.get_all_photos.first %}
+                {% if first_photo and first_photo.get_image_url %}
+                    <a href="{% url 'show_post' post.pk %}">
+                        <img class="post-image" src="{{ first_photo.get_image_url }}" alt="{{ post.caption }}">
+                    </a>
+                {% endif %}
+            {% endwith %}
+
+            <div class="post-content">
+                {% if post.get_likes %}
+                    <p class="likes-info">{{ post.get_likes.first }}</p>
+                {% endif %}
+                
+                <p><strong>{{ post.profile.username }}</strong> {{ post.caption }}</p>
+                
+                <div class="comments-section">
+                    {% for comment in post.get_all_comments %}
+                        <p><strong>{{ comment.profile.username }}</strong> {{ comment.text }}</p>
+                    {% empty %}
+                        <!-- This post has no comments. -->
+                    {% endfor %}
+                </div>
+                <p class="post-timestamp">{{ post.timestamp|date:"F j, Y" }}</p>
+            </div>
+        </article>
+    {% empty %}
+        <p>This feed is empty. Follow some profiles to see their posts here!</p>
+    {% endfor %}
+</main>
+
+{% endblock %}

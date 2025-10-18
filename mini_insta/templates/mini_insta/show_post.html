@@ -13,6 +13,8 @@
         <!-- If there are any likes, display the string from the first Like object -->
         {% if post.get_likes %}
             <p>{{ post.get_likes.first }}</p>
+        {% else %}
+            <p>This post has no Likes</p>
         {% endif %}
             {{ post.caption }}</strong>
         </p>

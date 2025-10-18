@@ -123,18 +123,42 @@ class DeletePostView(DeleteView):
     
 class UpdatePostView(UpdateView):
     '''A view to handle the update of a Post object'''
+
     model = Post
     form_class = UpdatePostForm
     template_name = 'mini_insta/update_post_form.html'
 
 class ShowFollowersDetailView(DetailView):
     '''A view to show the followers of a Profile'''
+
     model = Profile
     template_name = 'mini_insta/show_followers.html'
     context_object_name = 'profile'
 
 class ShowFollowingDetailView(DetailView):
     '''A view to show who a Profile is following'''
+
     model = Profile
     template_name = 'mini_insta/show_following.html'
     context_object_name = 'profile'
+
+class PostFeedListView(ListView):
+    '''A view to show the list of posts of an associated feed'''
+
+    model = Post
+    template_name = 'mini_insta/show_feed.html'
+    context_object_name = 'posts'
+
+    def get_context_data(self, **kwargs):
+        """Add the profile object to the context so we can display
+        the profile's username in the template."""
+        
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        
+        # Get the profile object using the pk from the URL and add it to the context
+        profile_pk = self.kwargs['pk']
+        context['profile'] = Profile.objects.get(pk=profile_pk)
+        
+        return context
+

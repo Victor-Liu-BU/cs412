@@ -49,6 +49,14 @@ class Profile(models.Model):
         '''Return the number of profiles this profile follows'''
         return len(self.get_following())
     
+    def get_post_feed(self):
+        '''Return a QuerySet of posts from profiles this user follows'''
+        following_profiles = self.get_following()
+        # Filter posts to include only those from the profiles the user is following
+        # Order by timestamp descending to get the most recent posts first
+        post_feed = Post.objects.filter(profile__in=following_profiles).order_by('-timestamp')
+        return post_feed
+    
 class Post(models.Model):
     '''Encapsulate the data of the Post object'''
 
@@ -129,7 +137,7 @@ class Comment(models.Model):
 
     def __str__(self):
         '''return a string representation of this model instance'''
-        return f'{self.profile.display_name} commented {self.text}'
+        return f'{self.profile.username} commented {self.text}'
     
 class Like(models.Model):
     '''Encapsulates the data of the Like object'''
