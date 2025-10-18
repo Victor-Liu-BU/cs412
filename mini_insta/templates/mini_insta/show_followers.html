@@ -5,14 +5,14 @@
 {% extends 'mini_insta/base.html' %}
 {% block content %}
 
-<main>
+<main class="profile-list-container">
     <h2>Followers of {{ profile.display_name }}</h2>
     <div class="profile-list">
         {% for follower in profile.get_followers %}
             <div class="profile-list-item">
                 <a href="{% url 'show_profile' follower.pk %}">
                     <img class="profile-pic-small" src="{{ follower.profile_image_url }}" alt="{{ follower.username }}">
-                    <span>{{ follower.display_name }}</span>
+                    <strong>{{ follower.display_name }}</strong>
                 </a>
             </div>
         {% empty %}

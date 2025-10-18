@@ -1,0 +1,23 @@
+<!-- mini_insta/templates/mini_insta/search.html -->
+<!-- Ting Shing Liu, 10/17/25 -->
+<!-- Search Page template for the mini insta webpage -->
+
+{% extends 'mini_insta/base.html' %}
+{% block content %}
+
+<main class="container">
+    <h2>Search Mini Insta</h2>
+    <p>You are searching as: <strong>{{ profile.username }}</strong></p>
+
+    <form class="form" method="GET" action="{% url 'search' profile.pk %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_query">Search Term:</label>
+            <input type="text" name="query" placeholder="Search for posts...">
+        </div>
+        
+        <button type="submit">Search</button>
+    </form>
+</main>
+
+{% endblock %}

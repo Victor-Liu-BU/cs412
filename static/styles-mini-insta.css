@@ -29,6 +29,52 @@ body {
     object-fit: cover;
 }
 
+.profile-list-container {
+    max-width: 600px;
+    margin: 20px auto;
+    background: #fff;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    /* Prevent content from touching the edges */
+    overflow: hidden; 
+}
+
+.profile-list-container h2 {
+    padding: 12px 16px;
+    margin: 0;
+    font-size: 1.1em;
+    border-bottom: 1px solid #dbdbdb;
+    text-align: center;
+    font-weight: bold;
+}
+
+.profile-list-item {
+    /* Spacing for each item in the list */
+    padding: 8px 16px;
+}
+
+.profile-list-item a {
+    display: flex; /* Aligns the image and name */
+    align-items: center; /* Vertically centers them */
+    gap: 12px; /* Space between image and name */
+    text-decoration: none;
+    color: #262626;
+}
+
+.profile-pic-small {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%; /* Makes the image circular */
+    object-fit: cover; /* Prevents stretching */
+}
+
+/* For the "No followers yet." text */
+.profile-list-container p {
+    padding: 16px;
+    text-align: center;
+    color: #8e8e8e;
+}
+
 .posts-section {
     max-width: 900px;
     margin: 40px auto; /* Adds space and centers it */

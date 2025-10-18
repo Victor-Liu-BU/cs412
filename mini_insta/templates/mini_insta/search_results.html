@@ -1,0 +1,31 @@
+<!-- mini_insta/templates/mini_insta/search_results.html -->
+<!-- Ting Shing Liu, 10/17/25 -->
+<!-- Search Results Page template for the mini insta webpage -->
+
+{% extends 'mini_insta/base.html' %}
+{% block content %}
+
+<main class="container">
+    <h2>Results for "{{ query }}"</h2>
+
+    <p><a href="{% url 'search' profile.pk %}">Perform a new search</a></p>
+
+    <hr>
+
+    <h3>Posts Found</h3>
+    <div class="results-list">
+        {% for post in posts %}
+            <article>
+                <p>
+                    <strong><a href="{% url 'show_profile' post.profile.pk %}">{{ post.profile.username }}</a>:</strong>
+                    {{ post.caption}}
+                </p>
+                <a href="{% url 'show_post' post.pk %}">View Post</a>
+            </article>
+        {% empty %}
+            <p>No posts found matching your search.</p>
+        {% endfor %}
+    </div>
+</main>
+
+{% endblock %}

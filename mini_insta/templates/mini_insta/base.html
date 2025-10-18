@@ -15,7 +15,7 @@
             <!--If condition to determine what header is displayed. If in profile, it will display profile username, if in post, display profile,
             else display show all profiles-->
             {% if profile %}
-            <h1>Mini Insta: {{profile.display_name}}</h1>
+            <h1>Mini Insta: {{profile.username}}</h1>
             {% elif post %}
             <h1>Mini Insta: {{post.profile}}</h1>
             {% else %}
@@ -34,8 +34,9 @@
                     {% if profile %}
                         <!-- If a profile is in context, link to their feed and profile page -->
                         <a href="{% url 'show_feed' profile.pk %}">Home (Feed)</a>
-                        <a href="{% url 'show_profile' profile.pk %}">| My Profile</a>
-                        <a href="{% url 'create_post' profile.pk %}">| Create Post</a>
+                        <a href="{% url 'show_profile' profile.pk %}"> | My Profile</a>
+                        <a href="{% url 'create_post' profile.pk %}"> | Create Post</a>
+                        <a href="{% url 'search' profile.pk %}"> | Search</a>
                     {% else %}
                         <!-- Default link if no specific profile is in context -->
                         <a href="{% url 'show_all_profiles' %}">Home (All Profiles)</a>

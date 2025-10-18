@@ -148,4 +148,4 @@ class Like(models.Model):
 
     def __str__(self):
         '''return a string representation of this model instance'''
-        return f'Liked by {self.profile.display_name} and {self.post.get_likes().count()} others'
+        return f'Liked by {self.profile.display_name} and {self.post.get_likes().count()-1} others'

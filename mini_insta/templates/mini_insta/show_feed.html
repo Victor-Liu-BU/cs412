@@ -28,6 +28,8 @@
             <div class="post-content">
                 {% if post.get_likes %}
                     <p class="likes-info">{{ post.get_likes.first }}</p>
+                {% else %}
+                    <p>This Post has no Likes</p>
                 {% endif %}
                 
                 <p><strong>{{ post.profile.username }}</strong> {{ post.caption }}</p>
@@ -37,6 +39,7 @@
                         <p><strong>{{ comment.profile.username }}</strong> {{ comment.text }}</p>
                     {% empty %}
                         <!-- This post has no comments. -->
+                        <p>No Comments</p>
                     {% endfor %}
                 </div>
                 <p class="post-timestamp">{{ post.timestamp|date:"F j, Y" }}</p>

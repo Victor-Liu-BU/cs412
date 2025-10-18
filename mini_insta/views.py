@@ -6,6 +6,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Profile, Post, Photo
 from .forms import CreatePostForm, UpdateProfileForm, UpdatePostForm
 from django.urls import reverse
+from django.db.models import Q
 
 # Create your views here.
 class ProfileListView(ListView):
@@ -149,10 +150,30 @@ class PostFeedListView(ListView):
     template_name = 'mini_insta/show_feed.html'
     context_object_name = 'posts'
 
+    def get_queryset(self):
+        """
+        This method filters and orders the posts for the feed.
+        """
+        # Get the profile primary key from the URL
+        profile_pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=profile_pk)
+
+        # Get the list of profiles this user is following
+        # (This relies on your Profile.get_following() model method)
+        following_profiles = profile.get_following()
+        
+        # Filter posts to only include those from the followed profiles
+        # AND order by timestamp descending (newest first).
+        queryset = Post.objects.filter(
+            profile__in=following_profiles
+        ).order_by('-timestamp') 
+        
+        return queryset
+    
     def get_context_data(self, **kwargs):
         """Add the profile object to the context so we can display
         the profile's username in the template."""
-        
+
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         
@@ -162,3 +183,55 @@ class PostFeedListView(ListView):
         
         return context
 
+class SearchView(ListView):
+    '''A view to handle searching for posts and profiles'''
+
+    template_name = 'mini_insta/search_results.html'
+    context_object_name = 'posts'
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Overrides the dispatch method.
+        If no 'query' is in the GET request, it shows the search.html form.
+        Otherwise, it proceeds with the ListView's normal flow.
+        """
+        query = self.request.GET.get('query')
+        if not query:
+            # No query submitted, so show the search form
+            profile = Profile.objects.get(pk=self.kwargs['pk'])
+            context = {'profile': profile}
+            return render(request, 'mini_insta/search.html', context)
+        
+        # A query is present, so let the ListView handle it
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        """
+        Returns a queryset of Posts matching the search query.
+        A Post matches if the query is in its caption.
+        """
+        query = self.request.GET.get('query')
+        if query:
+            # Search Post captions
+            return Post.objects.filter(caption__icontains=query)
+        
+        # Return an empty queryset if no query (though dispatch should prevent this)
+        return Post.objects.none()
+
+    def get_context_data(self, **kwargs):
+        """
+        Adds the search query, the searching profile, and
+        the Profile search results to the context.
+        """
+        # Call the base implementation first to get context (which includes 'posts')
+        context = super().get_context_data(**kwargs)
+        
+        query = self.request.GET.get('query')
+        profile_pk = self.kwargs['pk']
+        
+        # Add the searching profile to the context
+        context['profile'] = Profile.objects.get(pk=profile_pk)
+        
+        # Add the query string to the context
+        context['query'] = query
+        
+        return context
