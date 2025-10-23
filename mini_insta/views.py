@@ -7,6 +7,9 @@ from .models import Profile, Post, Photo
 from .forms import CreatePostForm, UpdateProfileForm, UpdatePostForm
 from django.urls import reverse
 from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin ## NEW
+from django.contrib.auth.forms import UserCreationForm ## NEW
+from django.contrib.auth.models import User ## NEW
 
 # Create your views here.
 class ProfileListView(ListView):
@@ -15,6 +18,16 @@ class ProfileListView(ListView):
     model = Profile
     template_name = "mini_insta/show_all_profiles.html"
     context_object_name = "profiles"
+
+    def dispatch(self, request, *args, **kwargs):
+        '''Override the dispatch method to add debugging information.'''
+
+        if request.user.is_authenticated:
+            print(f'ShowAllView.dispatch(): request.user={request.user}')
+        else:
+            print(f'ShowAllView.dispatch(): not logged in.')
+
+        return super().dispatch(request, *args, **kwargs)
 
 class ProfileDetailView(DetailView):
     '''Define a class inherited from DetailView to show a single Profile with details'''
@@ -30,23 +43,24 @@ class PostDetailView(DetailView):
     template_name = "mini_insta/show_post.html"
     context_object_name = "post"
 
-class CreatePostView(CreateView):
+class CreatePostView(LoginRequiredMixin, CreateView):
     '''A view to handle creation of a new Post on a Profile '''
     
     form_class = CreatePostForm
     template_name = 'mini_insta/create_post_form.html'
-    
+        
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login') 
+
     def get_context_data(self):
         # Calling the superclass method 
         context = super().get_context_data()
         
         # find/add profile to the context data
-        # Retrieve the pk from the URL
-        pk = self.kwargs['pk']
-        profile = Profile.objects.get(pk=pk)
+        # Get the profile for the currently logged-in user
+        context['profile'] = Profile.objects.get(user=self.request.user)
 
-        # Add this profile to the context dictionary
-        context['profile'] = profile
         return context
     
     def form_valid(self, form):
@@ -55,12 +69,15 @@ class CreatePostView(CreateView):
         We need to add the foreign key (of the Profile) to the Comment
         object before saving it to the database."""
 
-        # Retrieve the pk from the URL
-        pk = self.kwargs['pk']
-        profile = Profile.objects.get(pk=pk)
+        # Get the profile for the currently logged-in user
+        profile = Profile.objects.get(user=self.request.user)
 
         # Attach this post to the Profile
         form.instance.profile = profile # Set the Foreign Key
+
+        user = self.request.user
+        # attach user to form instance (Profile object):
+        form.instance.user = user
 
         # Delegate the work to the superclass method form_valid:
         response = super().form_valid(form)
@@ -87,14 +104,41 @@ class CreatePostView(CreateView):
         # return response
         return response
     
-class UpdateProfileView(UpdateView):
+    def get_object(self):
+        '''Override get_object to obtain the Profile for the logged-in user'''
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
+        return profile
+    
+class UpdateProfileView(LoginRequiredMixin, UpdateView):
     '''A view to handle the update of the Profile object'''
 
     model = Profile
     form_class = UpdateProfileForm
     template_name = 'mini_insta/update_profile_form.html'
 
-class DeletePostView(DeleteView):
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
+    
+    def form_valid(self, form):
+        """This method handles the form submission and saves the updated
+        Profile object to the Django database."""
+
+        user = self.request.user
+        # attach user to form instance (Profile object):
+        form.instance.user = user
+
+        # delegate the work to the superclass method form_valid:
+        return super().form_valid(form)
+    
+    def get_object(self):
+        '''Override get_object to obtain the Profile for the logged-in user'''
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
+        return profile
+    
+class DeletePostView(LoginRequiredMixin, DeleteView):
     '''A view to handle the deletion of the Post object'''
 
     model = Post
@@ -103,7 +147,6 @@ class DeletePostView(DeleteView):
     def get_context_data(self, **kwargs):
         # Calling the superclass method 
         context = super().get_context_data(**kwargs)
-
 
         context['profile'] = self.object.profile
         return context
@@ -122,12 +165,55 @@ class DeletePostView(DeleteView):
         # return the URL to redirect to:
         return reverse('show_profile', kwargs={'pk': profile.pk})
     
-class UpdatePostView(UpdateView):
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
+    
+    def form_valid(self, form):
+        """This method handles the form submission and saves the updated
+        Profile object to the Django database."""
+
+        user = self.request.user
+        # attach user to form instance (Profile object):
+        form.instance.user = user
+
+        # delegate the work to the superclass method form_valid:
+        return super().form_valid(form)
+
+    def get_object(self):
+        '''Override get_object to obtain the Profile for the logged-in user'''
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
+        return profile
+    
+class UpdatePostView(LoginRequiredMixin, UpdateView):
     '''A view to handle the update of a Post object'''
 
     model = Post
     form_class = UpdatePostForm
     template_name = 'mini_insta/update_post_form.html'
+
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
+    
+    def form_valid(self, form):
+        """This method handles the form submission and saves the updated
+        Profile object to the Django database."""
+
+        user = self.request.user
+        # attach user to form instance (Profile object):
+        form.instance.user = user
+
+        # delegate the work to the superclass method form_valid:
+        return super().form_valid(form)
+
+    def get_object(self):
+        '''Override get_object to obtain the Profile for the logged-in user'''
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
+        return profile
+    
 
 class ShowFollowersDetailView(DetailView):
     '''A view to show the followers of a Profile'''
@@ -143,7 +229,7 @@ class ShowFollowingDetailView(DetailView):
     template_name = 'mini_insta/show_following.html'
     context_object_name = 'profile'
 
-class PostFeedListView(ListView):
+class PostFeedListView(LoginRequiredMixin, ListView):
     '''A view to show the list of posts of an associated feed'''
 
     model = Post
@@ -152,23 +238,11 @@ class PostFeedListView(ListView):
 
     def get_queryset(self):
         """
-        This method filters and orders the posts for the feed.
+        This method returns the queryset of posts for the feed of the logged-in user.
         """
-        # Get the profile primary key from the URL
-        profile_pk = self.kwargs['pk']
-        profile = Profile.objects.get(pk=profile_pk)
-
-        # Get the list of profiles this user is following
-        # (This relies on your Profile.get_following() model method)
-        following_profiles = profile.get_following()
-        
-        # Filter posts to only include those from the followed profiles
-        # AND order by timestamp descending (newest first).
-        queryset = Post.objects.filter(
-            profile__in=following_profiles
-        ).order_by('-timestamp') 
-        
-        return queryset
+        # Get the profile for the currently logged-in user
+        profile = Profile.objects.get(user=self.request.user)
+        return profile.get_post_feed()
     
     def get_context_data(self, **kwargs):
         """Add the profile object to the context so we can display
@@ -177,17 +251,38 @@ class PostFeedListView(ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         
-        # Get the profile object using the pk from the URL and add it to the context
-        profile_pk = self.kwargs['pk']
-        context['profile'] = Profile.objects.get(pk=profile_pk)
+        # Get the profile for the currently logged-in user
+        context['profile'] = Profile.objects.get(user=self.request.user)
         
         return context
+    
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
+    
+    def form_valid(self, form):
+        """This method handles the form submission and saves the updated
+        Profile object to the Django database."""
 
-class SearchView(ListView):
+        user = self.request.user
+        # attach user to form instance (Profile object):
+        form.instance.user = user
+
+        # delegate the work to the superclass method form_valid:
+        return super().form_valid(form)
+
+    def get_object(self):
+        '''Override get_object to obtain the Profile for the logged-in user'''
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
+        return profile
+
+class SearchView(LoginRequiredMixin, ListView):
     '''A view to handle searching for posts and profiles'''
 
     template_name = 'mini_insta/search_results.html'
     context_object_name = 'posts'
+
     def dispatch(self, request, *args, **kwargs):
         """
         Overrides the dispatch method.
@@ -197,7 +292,8 @@ class SearchView(ListView):
         query = self.request.GET.get('query')
         if not query:
             # No query submitted, so show the search form
-            profile = Profile.objects.get(pk=self.kwargs['pk'])
+            # Get the profile for the currently logged-in user
+            profile = Profile.objects.get(user=self.request.user)
             context = {'profile': profile}
             return render(request, 'mini_insta/search.html', context)
         
@@ -226,12 +322,33 @@ class SearchView(ListView):
         context = super().get_context_data(**kwargs)
         
         query = self.request.GET.get('query')
-        profile_pk = self.kwargs['pk']
-        
-        # Add the searching profile to the context
-        context['profile'] = Profile.objects.get(pk=profile_pk)
+
+        # Get the profile for the currently logged-in user
+        context['profile'] = Profile.objects.get(user=self.request.user)
         
         # Add the query string to the context
         context['query'] = query
         
         return context
+    
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
+    
+    def form_valid(self, form):
+        """This method handles the form submission and saves the updated
+        Profile object to the Django database."""
+
+        user = self.request.user
+        # attach user to form instance (Profile object):
+        form.instance.user = user
+
+        # delegate the work to the superclass method form_valid:
+        return super().form_valid(form)
+
+    def get_object(self):
+        '''Override get_object to obtain the Profile for the logged-in user'''
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
+        return profile
+    

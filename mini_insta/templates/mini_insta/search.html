@@ -9,7 +9,7 @@
     <h2>Search Mini Insta</h2>
     <p>You are searching as: <strong>{{ profile.username }}</strong></p>
 
-    <form class="form" method="GET" action="{% url 'search' profile.pk %}">
+    <form class="form" method="GET" action="{% url 'search' %}">
         {% csrf_token %}
         <div class="form-group">
             <label for="id_query">Search Term:</label>

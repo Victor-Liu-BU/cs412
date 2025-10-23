@@ -21,6 +21,13 @@
             {% else %}
             <h1>Mini Insta: Showing All Profiles</h1>
             {% endif %}
+
+            <!-- show who's logged in -->
+            {% if request.user.is_authenticated %}
+            Logged in user: {{ request.user }}.
+            {% else %}
+            Not logged in.
+            {% endif %}
         </head>
 
         {% block content %}
@@ -33,10 +40,16 @@
                 <li>
                     {% if profile %}
                         <!-- If a profile is in context, link to their feed and profile page -->
-                        <a href="{% url 'show_feed' profile.pk %}">Home (Feed)</a>
+                        {% if request.user == profile.user %}
+                        <a href="{% url 'show_feed' %}">Home (Feed)</a>
                         <a href="{% url 'show_profile' profile.pk %}"> | My Profile</a>
-                        <a href="{% url 'create_post' profile.pk %}"> | Create Post</a>
-                        <a href="{% url 'search' profile.pk %}"> | Search</a>
+                        <a href="{% url 'create_post' %}"> | Create Post</a>
+                        <a href="{% url 'search' %}"> | Search</a>
+                        {% elif request.user.is_authenticated %}
+                        <a href="{% url 'search' %}"> | Search</a>
+                        {% else %}
+                        <a href="{% url 'login' %}"> | Log in to Create Post and Search</a>
+                        {% endif %}
                     {% else %}
                         <!-- Default link if no specific profile is in context -->
                         <a href="{% url 'show_all_profiles' %}">Home (All Profiles)</a>

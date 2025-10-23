@@ -17,7 +17,9 @@
                 <a href="{% url 'show_following' profile.pk %}">{{ profile.get_num_following }} Following</a>
             </div>
             <p>{{profile.bio_text | linebreaks}}</p>
-            <a href="{% url 'update_profile' profile.pk %}">Update Profile</a>
+            {% if request.user == profile.user %}
+            <a href="{% url 'update_profile' %}">Update Profile</a>
+            {% endif %}
         </div>
     </article>
     <article class="posts-section">

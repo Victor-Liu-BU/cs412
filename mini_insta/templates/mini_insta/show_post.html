@@ -21,8 +21,10 @@
         <!--using the timestamp attribute, style it using the pipeline | with the date method.
         F stands for full month, j for the day, and Y for the 4 digit year -->
         <p class="post-timestamp">{{ post.timestamp|date:"F j, Y" }}</p>
+        {% if request.user == post.profile.user %}
         <a href="{% url 'update_post' post.pk %}">Update</a>
         <a href="{% url 'delete_post' post.pk %}">Delete</a>
+        {% endif %}
     </div>
 
     <div class="grid-container">
