@@ -431,22 +431,22 @@ class AddFollowView(LoginRequiredMixin, View):
         return reverse('login')
 
     def post(self, request, *args, **kwargs):
-        # 1. Get the profile to follow (the "other" profile)
+        # Get the profile to follow (the "other" profile)
         profile_to_follow_pk = self.kwargs['pk']
         profile_to_follow = Profile.objects.get(pk=profile_to_follow_pk)
 
-        # 2. Get the current user's profile (the "follower")
+        # Get the current user's profile (the "follower")
         follower_profile = Profile.objects.get(user=request.user)
 
-        # 3. Check constraint: Don't allow following yourself
+        # Check constraint: Don't allow following yourself
         if profile_to_follow != follower_profile:
-            # 4. Create the Follow object, if it doesn't already exist
+            # Create the Follow object, if it doesn't already exist
             Follow.objects.get_or_create(
                 profile=profile_to_follow,
                 follower_profile=follower_profile
             )
 
-        # 5. Redirect back to the profile page
+        # Redirect back to the profile page
         return redirect('show_profile', pk=profile_to_follow_pk)
 
 class RemoveFollowView(LoginRequiredMixin, View):
@@ -456,14 +456,14 @@ class RemoveFollowView(LoginRequiredMixin, View):
         return reverse('login')
 
     def post(self, request, *args, **kwargs):
-        # 1. Get the profile to unfollow
+        # Get the profile to unfollow
         profile_to_unfollow_pk = self.kwargs['pk']
         profile_to_unfollow = Profile.objects.get(pk=profile_to_unfollow_pk)
 
-        # 2. Get the current user's profile
+        # Get the current user's profile
         follower_profile = Profile.objects.get(user=request.user)
 
-        # 3. Find and delete the Follow object
+        # Find and delete the Follow object
         follow_instance = Follow.objects.filter(
             profile=profile_to_unfollow,
             follower_profile=follower_profile
@@ -471,7 +471,7 @@ class RemoveFollowView(LoginRequiredMixin, View):
         if follow_instance.exists():
             follow_instance.delete()
 
-        # 4. Redirect back to the profile page
+        # Redirect back to the profile page
         return redirect('show_profile', pk=profile_to_unfollow_pk)
 
 class AddLikeView(LoginRequiredMixin, View):
@@ -481,22 +481,22 @@ class AddLikeView(LoginRequiredMixin, View):
         return reverse('login')
 
     def post(self, request, *args, **kwargs):
-        # 1. Get the post to like
+        # Get the post to like
         post_pk = self.kwargs['pk']
         post_to_like = Post.objects.get(pk=post_pk)
 
-        # 2. Get the current user's profile (the "liker")
+        # Get the current user's profile (the "liker")
         liker_profile = Profile.objects.get(user=request.user)
 
-        # 3. Check constraint: Don't allow liking your own post
+        # Check constraint: Don't allow liking your own post
         if post_to_like.profile != liker_profile:
-            # 4. Create the Like object, if it doesn't already exist
+            # Create the Like object, if it doesn't already exist
             Like.objects.get_or_create(
                 post=post_to_like,
                 profile=liker_profile
             )
 
-        # 5. Redirect back to the post page
+        # Redirect back to the post page
         return redirect('show_post', pk=post_pk)
 
 class RemoveLikeView(LoginRequiredMixin, View):
@@ -506,14 +506,14 @@ class RemoveLikeView(LoginRequiredMixin, View):
         return reverse('login')
 
     def post(self, request, *args, **kwargs):
-        # 1. Get the post to unlike
+        # Get the post to unlike
         post_pk = self.kwargs['pk']
         post_to_unlike = Post.objects.get(pk=post_pk)
 
-        # 2. Get the current user's profile
+        # Get the current user's profile
         liker_profile = Profile.objects.get(user=request.user)
 
-        # 3. Find and delete the Like object
+        # Find and delete the Like object
         like_instance = Like.objects.filter(
             post=post_to_unlike,
             profile=liker_profile
@@ -521,5 +521,5 @@ class RemoveLikeView(LoginRequiredMixin, View):
         if like_instance.exists():
             like_instance.delete()
 
-        # 4. Redirect back to the post page
+        # Redirect back to the post page
         return redirect('show_post', pk=post_pk)

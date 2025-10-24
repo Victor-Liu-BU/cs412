@@ -24,8 +24,8 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='mini_insta/login.html'), name='login'), # Path to the login page
 	path('logout/', auth_views.LogoutView.as_view(next_page='show_all_profiles'), name='logout'), # Path to the logout page
     path('create_profile/', CreateProfileView.as_view(), name='create_profile'), # Path to the create profile page
-    path('profile/<int:pk>/follow', AddFollowView.as_view(), name='follow'),
-    path('profile/<int:pk>/delete_follow', RemoveFollowView.as_view(), name='unfollow'),
-    path('post/<int:pk>/like', AddLikeView.as_view(), name='like_post'),
-    path('post/<int:pk>/delete_like', RemoveLikeView.as_view(), name='unlike_post'),
+    path('profile/<int:pk>/follow', AddFollowView.as_view(), name='follow'), # Path to follow a profile
+    path('profile/<int:pk>/delete_follow', RemoveFollowView.as_view(), name='unfollow'), # Path to unfollow a profile
+    path('post/<int:pk>/like', AddLikeView.as_view(), name='like_post'), # Path to like a post
+    path('post/<int:pk>/delete_like', RemoveLikeView.as_view(), name='unlike_post'), # Path to unlike a post
 ]
