@@ -28,3 +28,19 @@ class UpdatePostForm(forms.ModelForm):
         """Associate this form with a model in our database"""
         model = Post
         fields = ['caption']
+
+class UserCreationForm(forms.ModelForm):
+    """A form to create a User in the database"""
+
+    class Meta:
+        """Associate this form with a model in the database"""
+        model = User
+        fields = ['username', 'password']
+
+class CreateProfileForm(forms.ModelForm):
+    """A form to create a Profile in the database"""
+
+    class Meta:
+        """Associate this form with a model in the database"""
+        model = Profile
+        fields = ['username', 'display_name', 'bio_text', 'profile_image_url']

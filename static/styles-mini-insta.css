@@ -74,6 +74,10 @@ body {
     text-align: center;
     color: #8e8e8e;
 }
+.post-actions {
+    margin-top: 15px; /* Adds space above the button(s) */
+    padding: 0 15px;
+}
 
 .posts-section {
     max-width: 900px;
@@ -187,7 +191,49 @@ body {
     text-transform: uppercase;
 }
 
-/* End New Post Feed Styles */
+.action-button {
+    /* Reset button defaults */
+    background: none;
+    border: none;
+    padding: 6px 12px; /* Add some padding */
+    margin: 5px 0;     /* Add some margin */
+    font: inherit;     /* Use the standard font */
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px; /* Slightly rounded corners */
+    display: inline-block; /* Make it behave like a link */
+    text-align: center;
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+/* Style for Following/Liking state */
+.follow-button,
+.like-button {
+    background-color: #8e8e8e;  
+    color: white;
+}
+.follow-button:hover,
+.like-button:hover {
+    background-color: #2a7fc9; /* Darker blue on hover */
+}
+
+/* Style for Unfollow/Unlike state */
+.unfollow-button,
+.unlike-button {
+    background-color: #eee; /* Light grey background */
+    color: #262626; /* Dark text */
+    border: 1px solid #dbdbdb; /* Add a light border */
+    padding: 5px 11px; /* Adjust padding because of border */
+}
+.unfollow-button:hover,
+.unlike-button:hover {
+    background-color: #e0e0e0; /* Slightly darker grey on hover */
+}
+
+/* Ensure buttons line up nicely in profile info */
+.profile-info .action-button {
+    margin-top: 10px; /* Add space above the button */
+}
 
 footer {
     position: fixed;

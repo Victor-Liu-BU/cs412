@@ -3,13 +3,16 @@
 # Views file for the mini_insta app that describes the Profile classes that will be used in the application
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Profile, Post, Photo
-from .forms import CreatePostForm, UpdateProfileForm, UpdatePostForm
-from django.urls import reverse
+from .models import Profile, Post, Photo, Follow, Like
+from .forms import CreatePostForm, UpdateProfileForm, UpdatePostForm, CreateProfileForm
+from django.shortcuts import redirect
+from django.urls import reverse 
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin ## NEW
 from django.contrib.auth.forms import UserCreationForm ## NEW
 from django.contrib.auth.models import User ## NEW
+from django.contrib.auth import login ## NEW
+from django.views import View
 
 # Create your views here.
 class ProfileListView(ListView):
@@ -36,12 +39,53 @@ class ProfileDetailView(DetailView):
     template_name = "mini_insta/show_profile.html"
     context_object_name = "profile"
 
+    def get_object(self):
+        '''Override get_object to obtain the Profile for the logged-in user'''
+
+        if 'pk' not in self.kwargs:
+            user = self.request.user
+            profile = Profile.objects.get(user=user)
+            return profile
+        else:
+            return super().get_object()
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+
+        # Add the logged-in user's profile to the context, if they exist
+        if self.request.user.is_authenticated:
+            try:
+                viewer_profile = Profile.objects.get(user=self.request.user)
+                context['viewer_profile'] = viewer_profile
+            except Profile.DoesNotExist:
+                context['viewer_profile'] = None # Handle case where user has no profile yet
+        else:
+             context['viewer_profile'] = None
+
+        return context
 class PostDetailView(DetailView):
     '''Define a class interited from DetailView to show a single post with details'''
 
     model = Post
     template_name = "mini_insta/show_post.html"
     context_object_name = "post"
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+
+        # Add the logged-in user's profile to the context, if they exist
+        if self.request.user.is_authenticated:
+            try:
+                viewer_profile = Profile.objects.get(user=self.request.user)
+                context['viewer_profile'] = viewer_profile
+            except Profile.DoesNotExist:
+                context['viewer_profile'] = None # Handle case where user has no profile yet
+        else:
+             context['viewer_profile'] = None
+
+        return context
 
 class CreatePostView(LoginRequiredMixin, CreateView):
     '''A view to handle creation of a new Post on a Profile '''
@@ -168,23 +212,6 @@ class DeletePostView(LoginRequiredMixin, DeleteView):
     def get_login_url(self) -> str:
         '''return the URL required for login'''
         return reverse('login')
-    
-    def form_valid(self, form):
-        """This method handles the form submission and saves the updated
-        Profile object to the Django database."""
-
-        user = self.request.user
-        # attach user to form instance (Profile object):
-        form.instance.user = user
-
-        # delegate the work to the superclass method form_valid:
-        return super().form_valid(form)
-
-    def get_object(self):
-        '''Override get_object to obtain the Profile for the logged-in user'''
-        user = self.request.user
-        profile = Profile.objects.get(user=user)
-        return profile
     
 class UpdatePostView(LoginRequiredMixin, UpdateView):
     '''A view to handle the update of a Post object'''
@@ -352,3 +379,147 @@ class SearchView(LoginRequiredMixin, ListView):
         profile = Profile.objects.get(user=user)
         return profile
     
+class CreateProfileView(CreateView):
+    '''A view to handle creation of a new Profile in the database'''
+    
+    form_class = CreateProfileForm
+    template_name = 'mini_insta/create_profile_form.html'
+        
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login') 
+
+    def form_valid(self, form):
+        '''Handle the form submission to create a new User and Profile object.'''
+        
+        # Reconstruct the UserCreationForm from the POST data
+        user_form = UserCreationForm(self.request.POST)
+
+        if user_form.is_valid():
+            # Save the new User object
+            user = user_form.save()
+
+            # Log the new user in
+            login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+
+            # Attach the new user to the Profile form instance
+            form.instance.user = user
+
+            # Delegate the rest to the super class' form_valid (saves profile, redirects)
+            return super().form_valid(form)
+        else:
+            # The UserCreationForm was invalid, so re-render the page
+            # with both forms and their errors.
+            context = self.get_context_data()
+            context['form'] = form           # The (valid) CreateProfileForm
+            context['user_form'] = user_form # The (invalid) UserCreationForm
+            return self.render_to_response(context)
+        
+    def get_context_data(self, **kwargs):
+        # Calling the superclass method 
+        context = super().get_context_data(**kwargs)
+        
+        # Add an instance of the UserCreationForm to the context
+        context['user_form'] = UserCreationForm()
+
+        return context
+    
+class AddFollowView(LoginRequiredMixin, View):
+    '''A view to handle the creation of a Follow object'''
+    
+    def get_login_url(self):
+        return reverse('login')
+
+    def post(self, request, *args, **kwargs):
+        # 1. Get the profile to follow (the "other" profile)
+        profile_to_follow_pk = self.kwargs['pk']
+        profile_to_follow = Profile.objects.get(pk=profile_to_follow_pk)
+
+        # 2. Get the current user's profile (the "follower")
+        follower_profile = Profile.objects.get(user=request.user)
+
+        # 3. Check constraint: Don't allow following yourself
+        if profile_to_follow != follower_profile:
+            # 4. Create the Follow object, if it doesn't already exist
+            Follow.objects.get_or_create(
+                profile=profile_to_follow,
+                follower_profile=follower_profile
+            )
+
+        # 5. Redirect back to the profile page
+        return redirect('show_profile', pk=profile_to_follow_pk)
+
+class RemoveFollowView(LoginRequiredMixin, View):
+    '''A view to handle the deletion of a Follow object'''
+    
+    def get_login_url(self):
+        return reverse('login')
+
+    def post(self, request, *args, **kwargs):
+        # 1. Get the profile to unfollow
+        profile_to_unfollow_pk = self.kwargs['pk']
+        profile_to_unfollow = Profile.objects.get(pk=profile_to_unfollow_pk)
+
+        # 2. Get the current user's profile
+        follower_profile = Profile.objects.get(user=request.user)
+
+        # 3. Find and delete the Follow object
+        follow_instance = Follow.objects.filter(
+            profile=profile_to_unfollow,
+            follower_profile=follower_profile
+        )
+        if follow_instance.exists():
+            follow_instance.delete()
+
+        # 4. Redirect back to the profile page
+        return redirect('show_profile', pk=profile_to_unfollow_pk)
+
+class AddLikeView(LoginRequiredMixin, View):
+    '''A view to handle the creation of a Like object'''
+    
+    def get_login_url(self):
+        return reverse('login')
+
+    def post(self, request, *args, **kwargs):
+        # 1. Get the post to like
+        post_pk = self.kwargs['pk']
+        post_to_like = Post.objects.get(pk=post_pk)
+
+        # 2. Get the current user's profile (the "liker")
+        liker_profile = Profile.objects.get(user=request.user)
+
+        # 3. Check constraint: Don't allow liking your own post
+        if post_to_like.profile != liker_profile:
+            # 4. Create the Like object, if it doesn't already exist
+            Like.objects.get_or_create(
+                post=post_to_like,
+                profile=liker_profile
+            )
+
+        # 5. Redirect back to the post page
+        return redirect('show_post', pk=post_pk)
+
+class RemoveLikeView(LoginRequiredMixin, View):
+    '''A view to handle the deletion of a Like object'''
+    
+    def get_login_url(self):
+        return reverse('login')
+
+    def post(self, request, *args, **kwargs):
+        # 1. Get the post to unlike
+        post_pk = self.kwargs['pk']
+        post_to_unlike = Post.objects.get(pk=post_pk)
+
+        # 2. Get the current user's profile
+        liker_profile = Profile.objects.get(user=request.user)
+
+        # 3. Find and delete the Like object
+        like_instance = Like.objects.filter(
+            post=post_to_unlike,
+            profile=liker_profile
+        )
+        if like_instance.exists():
+            like_instance.delete()
+
+        # 4. Redirect back to the post page
+        return redirect('show_post', pk=post_pk)

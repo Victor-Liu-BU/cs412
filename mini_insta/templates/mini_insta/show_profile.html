@@ -19,7 +19,22 @@
             <p>{{profile.bio_text | linebreaks}}</p>
             {% if request.user == profile.user %}
             <a href="{% url 'update_profile' %}">Update Profile</a>
+            {% else %}
+                {% if viewer_profile %} 
+                    {% if viewer_profile in profile.get_followers %}
+                        <form action="{% url 'unfollow' profile.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="action-button unfollow-button">Unfollow</button>
+                        </form>
+                    {% else %}
+                        <form action="{% url 'follow' profile.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="action-button follow-button">Follow</button>
+                        </form>
+                    {% endif %}
+                {% endif %}
             {% endif %}
+        </div>
         </div>
     </article>
     <article class="posts-section">

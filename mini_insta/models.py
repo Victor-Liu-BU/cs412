@@ -17,7 +17,7 @@ class Profile(models.Model):
     bio_text = models.TextField(blank=True)
     join_date = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+
     def __str__(self):
         '''return a string representation of this model instance '''
 
@@ -59,6 +59,10 @@ class Profile(models.Model):
         post_feed = Post.objects.filter(profile__in=following_profiles).order_by('-timestamp')
         return post_feed
     
+    def is_followed_by(self, user_profile):
+        '''Returns True if this profile (self) is followed by user_profile'''
+        return Follow.objects.filter(profile=self, follower_profile=user_profile).exists()
+    
 class Post(models.Model):
     '''Encapsulate the data of the Post object'''
 
@@ -90,6 +94,15 @@ class Post(models.Model):
         '''Return a QuerySet of all Likes on this Post'''
         likes = Like.objects.filter(post=self)
         return likes
+
+    def is_liked_by(self, user_profile):
+        '''Returns True if this post (self) is liked by user_profile'''
+        return Like.objects.filter(post=self, profile=user_profile).exists()
+    
+    def get_liking_profiles(self):
+        '''Return a list of profiles that liked this Post'''
+        likes = self.get_likes()
+        return [like.profile for like in likes]
     
 class Photo(models.Model):
     '''Encapsulate the data of the Photo object'''

@@ -8,26 +8,25 @@
 <div class="posts-section">
 
     <div class="post-caption-detail">
-        <p><strong>{{ post.profile.username }} 
-
+        <p><strong>{{ post.profile.username }} <br>
+        {{ post.caption }}</strong>
         <!-- If there are any likes, display the string from the first Like object -->
         {% if post.get_likes %}
             <p>{{ post.get_likes.first }}</p>
         {% else %}
             <p>This post has no Likes</p>
-        {% endif %}
-            {{ post.caption }}</strong>
+        {% endif %}    
         </p>
         <!--using the timestamp attribute, style it using the pipeline | with the date method.
         F stands for full month, j for the day, and Y for the 4 digit year -->
         <p class="post-timestamp">{{ post.timestamp|date:"F j, Y" }}</p>
         {% if request.user == post.profile.user %}
-        <a href="{% url 'update_post' post.pk %}">Update</a>
-        <a href="{% url 'delete_post' post.pk %}">Delete</a>
+            <a href="{% url 'update_post' post.pk %}">Update</a>
+            <a href="{% url 'delete_post' post.pk %}">Delete</a>
         {% endif %}
     </div>
 
-    <div class="grid-container">
+<div class="grid-container">
         {% for photo in post.get_all_photos %}
             <div class="grid-item">
                 <img src="{{photo.get_image_url}}" alt="{{post.caption}}">
@@ -35,6 +34,26 @@
         {% empty %}
             <p>This post has no photos.</p>
         {% endfor %}
+    </div>
+
+    <div class="post-actions"> 
+        {% if request.user.is_authenticated %}
+            {% if request.user != post.profile.user %}
+                {% if viewer_profile %}
+                    {% if viewer_profile in post.get_liking_profiles %}
+                        <form action="{% url 'unlike_post' post.pk %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="action-button unlike-button">Unlike</button>
+                        </form>
+                    {% else %}
+                        <form action="{% url 'like_post' post.pk %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="action-button like-button">Like</button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
     </div>
     <h3>Comments</h3>
     <div>
