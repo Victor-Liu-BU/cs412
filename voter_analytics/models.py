@@ -1,3 +1,7 @@
+# voter_analytics/models.py
+# Ting Shing Liu, 10/31/25
+# Models for Voter Analytics app
+
 from datetime import datetime
 from django.db import models
 
@@ -42,7 +46,7 @@ def load_data():
     one object at a time, matching the marathon example style.
     """
     Voter.objects.all().delete()
-    
+
     filename = r"\Users\victo\Downloads\newton_voters.csv"
     f = open(filename)
     f.readline()

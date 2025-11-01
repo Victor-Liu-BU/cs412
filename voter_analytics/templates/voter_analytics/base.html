@@ -1,0 +1,23 @@
+<!-- voter_analytics/templates/voter_analytics/base.html -->
+<!-- Ting Shing Liu, 10/31/25 -->
+<!-- Base page template for the voter analytics webpage -->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% block title %}Newton Voter Analytics{% endblock %}</title>
+    
+    <link rel="stylesheet" href="{% static 'css/styles-voter-analytics.css' %}">
+</head>
+<body>
+
+    <div class="content-wrapper">
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>

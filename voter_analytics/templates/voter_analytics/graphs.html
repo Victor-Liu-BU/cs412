@@ -1,0 +1,96 @@
+<!--voter_analytics/templates/voter_analytics/graphs.html-->
+<!--Ting Shing Liu, 10/31/25-->
+<!--Voter Data Graphs Page Template-->
+
+{% extends 'voter_analytics/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Voter Data Graphs</h1>
+    
+    <div class="nav">
+         <a href="{% url 'voters' %}">← Back to Voter List</a>
+    </div>
+
+    <div class="filter-form">
+        <h3>Filter Graphs</h3>
+        
+        <form method="GET" action="{% url 'graphs' %}">
+            
+            <div>
+                <label for="party">Party:</label>
+                <select name="party" id="party">
+                    <option value="">All Parties</option>
+                    {% for party in party_options %}
+                        <option value="{{ party }}" {% if current_filters.party == party %}selected{% endif %}>
+                            {{ party }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <label for="min_year">Born After:</label>
+                <select name="min_year" id="min_year">
+                    <option value="">Any Year</option>
+                    {% for year in year_options %}
+                        <option value="{{ year }}" {% if current_filters.min_year|add:0 == year %}selected{% endif %}>
+                            {{ year }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <label for="max_year">Born Before:</label>
+                <select name="max_year" id="max_year">
+                    <option value="">Any Year</option>
+                    {% for year in year_options %}
+                        <option value="{{ year }}" {% if current_filters.max_year|add:0 == year %}selected{% endif %}>
+                            {{ year }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <label for="voter_score">Voter Score:</label>
+                <select name="voter_score" id="voter_score">
+                    <option value="">All Scores</option>
+                    {% for score in score_options %}
+                        <option value="{{ score }}" {% if current_filters.voter_score|add:0 == score %}selected{% endif %}>
+                            {{ score }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <strong>Voted In:</strong>
+                <label><input type="checkbox" name="v20state" value="True" {% if current_filters.v20state %}checked{% endif %}> '20 State</label>
+                <label><input type="checkbox" name="v21town" value="True" {% if current_filters.v21town %}checked{% endif %}> '21 Town</label>
+                <label><input type="checkbox" name="v21primary" value="True" {% if current_filters.v21primary %}checked{% endif %}> '21 Primary</label>
+                <label><input type="checkbox" name="v22general" value="True" {% if current_filters.v22general %}checked{% endif %}> '22 General</label>
+                <label><input type="checkbox" name="v23town" value="True" {% if current_filters.v23town %}checked{% endif %}> '23 Town</label>
+            </div>
+            
+            <button type="submit">Filter Graphs</button>
+            <a href="{% url 'graphs' %}">Clear Filters</a>
+        </form>
+    </div>
+
+    <div class="graph-container" style="margin-top: 20px;">
+        {% if birth_year_graph %}
+            {{ birth_year_graph|safe }}
+        {% else %}
+            <p>No birth year data for this filter.</p>
+        {% endif %}
+        
+        {% if party_pie_chart %}
+            {{ party_pie_chart|safe }}
+        {% else %}
+            <p>No party data for this filter.</p>
+        {% endif %}
+
+        {% if election_bar_chart %}
+            {{ election_bar_chart|safe }}
+        {% else %}
+            <p>No election data for this filter.</p>
+        {% endif %}
+    </div>
+
+{% endblock %}
