@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'mini_insta', #Assignment3
     'marathon_analytics', #Module8
     'voter_analytics', #Assignment8
+    'rest_framework', #Django REST Framework for API development
+    'dadjokes', #Assignment10
 ]
 
 MIDDLEWARE = [
@@ -149,3 +151,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = 'media/'
+
+REST_FRAMEWORK = {
+  'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+  'PAGE_SIZE': 10
+}
+ 

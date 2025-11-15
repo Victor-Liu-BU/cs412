@@ -29,6 +29,7 @@ urlpatterns = [
     path('mini_insta/', include("mini_insta.urls")), # The link with the mini_insta path will get redirected to the mini_insta app
     path('marathon_analytics/', include("marathon_analytics.urls")), # The link with the marathon_analytics path will get redirected to the marathon_analytics app
     path('voter_analytics/', include('voter_analytics.urls')), # The link with the voter_analytics path will get redirected to the voter_analytics app
+    path('dadjokes/', include('dadjokes.urls')), # The link with the dadjokes path will get redirected to the dadjokes app
 ] 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

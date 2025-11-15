@@ -1,0 +1,25 @@
+<!--dadjokes/templates/dadjokes/base.html-->
+<!--Ting Shing Liu, 11/14/25-->
+<!--Base Template for the dadjokes webapp-->
+{% load static %}
+
+<html>
+    <head>
+        <title>Dad Jokes</title>
+        <link rel="stylesheet" href="{% static 'styles-blog.css' %}">
+    </head>
+    <body>
+        <head>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'all_jokes' %}">All Jokes</a></li>
+                    <li><a href="{% url 'all_pictures' %}">All Pictures</a></li>
+                    <li><a href="{% url 'random_page' %}">Random</a></li>
+                </ul>
+            </nav>
+        </head>
+
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,11 @@
+<!--dadjokes/templates/dadjokes/single_picture.html-->
+<!--Ting Shing Liu, 11/14/25-->
+<!--Single picture template for the dad jokes webapp-->
+{% extends 'dadjokes/base.html' %}
+
+{% block content %}
+<h1>A Single Picture</h1>
+    <p>From: {{ picture.name }}</p>
+    <img src="{{ picture.image_url }}" alt="Silly Picture" style="max-width: 500px;">
+    <p><small>Added on: {{ picture.timestamp }}</small></p>
+{% endblock %}

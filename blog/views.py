@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin ## NEW
 from django.contrib.auth.forms import UserCreationForm ## NEW
 from django.contrib.auth.models import User ## NEW
+from rest_framework import generics
+from .serializers import *
 import random
 # Create your views here.
 
@@ -166,3 +168,14 @@ class RegistrationView(CreateView):
     form_class = UserCreationForm
     model = User
  
+class ArticleListAPIView(generics.ListCreateAPIView):
+  '''
+  An API view to return a listing of Articles 
+  and to create an Article.
+  '''
+  queryset = Article.objects.all()
+  serializer_class = ArticleSerializer
+ 
+class ArticleDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+  queryset = Article.objects.all()
+  serializer_class = ArticleSerializer

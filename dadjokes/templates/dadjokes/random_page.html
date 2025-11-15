@@ -1,0 +1,27 @@
+<!--dadjokes/templates/dadjokes/random_page.html-->
+<!--Ting Shing Liu, 11/14/25-->
+<!--Random Page Template for the dadjokes webapp-->
+
+{% extends 'dadjokes/base.html' %}
+
+{% block content %}
+<h1>Random Fun</h1>
+    
+    {% if joke %}
+        <h2>Joke</h2>
+        <p>"{{ joke.text }}"</p>
+        <p><i>- {{ joke.name }}</i></p>
+    {% else %}
+        <p>No jokes found!</p>
+    {% endif %}
+
+    <hr>
+
+    {% if picture %}
+        <h2>Picture</h2>
+        <p>From: {{ picture.name }}</p>
+        <img src="{{ picture.image_url }}" alt="Silly Picture" style="max-width: 400px;">
+    {% else %}
+        <p>No pictures found!</p>
+    {% endif %}
+{% endblock %}

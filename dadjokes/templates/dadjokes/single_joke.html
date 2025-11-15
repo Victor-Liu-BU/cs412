@@ -1,0 +1,12 @@
+<!--dadjokes/templates/dadjokes/single_joke.html-->
+<!--Ting Shing Liu, 11/14/25-->
+<!--Single joke template for the dad jokes webapp-->
+{% extends 'dadjokes/base.html' %}
+
+{% block content %}
+<h1>A Single Joke</h1>
+    <p>"{{ joke.text }}"</p>
+    <p><i>- {{ joke.name }}</i></p>
+    <p><small>Added on: {{ joke.timestamp }}</small></p>
+
+{% endblock %}
