@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'voter_analytics', #Assignment8
     'rest_framework', #Django REST Framework for API development
     'dadjokes', #Assignment10
+    'project', #Project app
 ]
 
 MIDDLEWARE = [
