@@ -10,20 +10,43 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.views import View
 from django.db.models import Q
+from datetime import date
 
 # --- Profile Views ---
 
 class ProfileListView(ListView):
-    '''View to display a list of all Profiles (The "Browse" page)'''
+    '''View to display a list of all Profiles with Age Filtering'''
     model = Profile
     template_name = 'project/profile_list.html'
     context_object_name = 'profiles'
 
     def get_queryset(self):
-        # Exclude the current user from the list if they are logged in
+        # 1. Start with everyone except the current user
         if self.request.user.is_authenticated:
-            return Profile.objects.exclude(user=self.request.user)
-        return Profile.objects.all()
+            queryset = Profile.objects.exclude(user=self.request.user)
+        else:
+            queryset = Profile.objects.all()
+
+        # 2. Get input from the search form
+        min_age = self.request.GET.get('min_age')
+        max_age = self.request.GET.get('max_age')
+        today = date.today()
+
+        # 3. Apply Min Age Filter (Must be born BEFORE this date)
+        if min_age and min_age.isdigit():
+            # Example: Min Age 20. Cutoff = Today - 20 years.
+            # To be 20 or older, DOB must be <= Cutoff
+            cutoff_date = today.replace(year=today.year - int(min_age))
+            queryset = queryset.filter(dob__lte=cutoff_date)
+
+        # 4. Apply Max Age Filter (Must be born AFTER this date)
+        if max_age and max_age.isdigit():
+            # Example: Max Age 30. Cutoff = Today - 30 years.
+            # To be 30 or younger, DOB must be >= Cutoff
+            cutoff_date = today.replace(year=today.year - int(max_age))
+            queryset = queryset.filter(dob__gte=cutoff_date)
+
+        return queryset
 
 class ProfileDetailView(DetailView):
     '''View to display a single Profile details'''

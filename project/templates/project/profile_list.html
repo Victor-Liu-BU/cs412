@@ -4,22 +4,40 @@
 {% extends 'project/base.html' %}
 
 {% block content %}
-<h2>Find your Player 2</h2>
+
+<div class="search-container" style="text-align: center; margin: 20px 0;">
+    <h2>Find your Player 2</h2>
+    
+    <form method="GET" action="{% url 'profile_list' %}" style="display: inline-block; background: #f8f8f8; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
+        <label for="min_age">Age Range:</label>
+        
+        <input type="number" name="min_age" placeholder="Min" min="18" max="100" style="width: 60px; padding: 5px;" value="{{ request.GET.min_age }}">
+        <span style="margin: 0 5px;">to</span>
+        <input type="number" name="max_age" placeholder="Max" min="18" max="100" style="width: 60px; padding: 5px;" value="{{ request.GET.max_age }}">
+        
+        <button type="submit" class="action-button" style="padding: 6px 15px; margin-left: 10px;">Filter</button>
+        
+        {% if request.GET.min_age or request.GET.max_age %}
+            <a href="{% url 'profile_list' %}" style="margin-left: 10px; color: #ed4956; text-decoration: none; font-size: 0.9em;">Clear</a>
+        {% endif %}
+    </form>
+</div>
+
 <div class="grid-container">
     {% for p in profiles %}
-        <div class="profile-card" style="border: 1px solid #ccc; padding: 10px; margin: 10px; display: inline-block;">
-            <a href="{% url 'show_profile' p.pk %}">
+        <div class="profile-card" style="border: 1px solid #ccc; padding: 10px; margin: 10px; display: inline-block; vertical-align: top; width: 180px; text-align: center; background: white; border-radius: 8px;">
+            <a href="{% url 'show_profile' p.pk %}" style="text-decoration: none; color: black;">
                 {% if p.profile_image_url %}
-                    <img src="{{ p.profile_image_url.url }}" alt="{{ p.name }}" style="max-width: 150px;">
+                    <img src="{{ p.profile_image_url.url }}" alt="{{ p.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; margin-bottom: 10px;">
                 {% else %}
-                   <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930" alt="No Image" style="max-width: 150px;">
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930" alt="No Image" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; margin-bottom: 10px;">
                 {% endif %}
-                <h3>{{ p.name }}</h3>
-                <p>Age: {{ p.dob|timesince }}</p>
+                <h3 style="margin: 5px 0;">{{ p.name }}</h3>
+                <p style="color: #666; font-size: 0.9em;">Age: {{ p.dob|timesince }}</p>
             </a>
         </div>
     {% empty %}
-        <p>No profiles found yet.</p>
+        <p style="text-align: center; width: 100%;">No profiles found matching that age range.</p>
     {% endfor %}
 </div>
 {% endblock %}
