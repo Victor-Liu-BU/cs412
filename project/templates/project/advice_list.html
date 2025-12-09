@@ -5,15 +5,25 @@
 {% extends 'project/base.html' %}
 
 {% block content %}
-<h2>Relationship Advice for CS Majors</h2>
-<ul>
-    {% for advice in advice_list %}
-        <li style="margin-bottom: 20px;">
-            <blockquote>"{{ advice.text }}"</blockquote>
-            <cite>- {{ advice.author }}</cite>
-        </li>
-    {% empty %}
-        <li>No advice available at the moment. Good luck!</li>
-    {% endfor %}
-</ul>
+<div class="advice-container">
+    <div class="advice-header">
+        <h2>Relationship Advice <br><span class="subtitle">for CS Majors</span></h2>
+    </div>
+
+    <div class="advice-grid">
+        {% for advice in advice_list %}
+            <div class="advice-card">
+                <div class="quote-icon">“</div>
+                <p class="advice-text">{{ advice.text }}</p>
+                <div class="advice-author">
+                    — {{ advice.author }}
+                </div>
+            </div>
+        {% empty %}
+            <div class="no-advice">
+                <p>No advice available at the moment. Good luck debugging your love life!</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

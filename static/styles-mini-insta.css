@@ -390,6 +390,100 @@ nav li {
 .message-input button:hover {
     background-color: #0074cc;
 }
+
+/* --- Advice Page Styles --- */
+
+.advice-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.advice-header h2 {
+    text-align: center;
+    color: #262626;
+    font-size: 2em;
+    margin-bottom: 40px;
+    line-height: 1.2;
+}
+
+.advice-header .subtitle {
+    font-size: 0.6em;
+    color: #8e8e8e;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Responsive Grid Layout */
+.advice-grid {
+    display: grid;
+    /* This creates columns that auto-fit the screen width (min 300px wide) */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 30px;
+}
+
+.advice-card {
+    background: #fff;
+    border: 1px solid #dbdbdb;
+    border-radius: 12px;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Subtle drop shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Hover Effect: Lifts the card slightly */
+.advice-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+    border-color: #b2b2b2;
+}
+
+.quote-icon {
+    font-family: serif;
+    font-size: 5em;
+    color: #e91e63; /* Dating App Pink */
+    opacity: 0.15;
+    position: absolute;
+    top: 0px;
+    left: 20px;
+    line-height: 1;
+}
+
+.advice-text {
+    font-size: 1.1em;
+    color: #444;
+    line-height: 1.6;
+    margin: 20px 0;
+    font-family: 'Georgia', serif; /* Serif font looks better for quotes */
+    z-index: 1;
+    position: relative;
+    font-style: italic;
+}
+
+.advice-author {
+    text-align: right;
+    font-weight: bold;
+    color: #0095f6; /* App Blue */
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-top: 1px solid #efefef;
+    padding-top: 15px;
+}
+
+.no-advice {
+    grid-column: 1 / -1; /* Span full width */
+    text-align: center;
+    padding: 40px;
+    background: #f8f8f8;
+    border-radius: 8px;
+    color: #888;
+}
 /* Responsive Styles */
 @media screen and (max-width: 760px) {
     .profile-bio {
