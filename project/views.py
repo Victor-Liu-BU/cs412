@@ -131,9 +131,28 @@ class CreatePostView(LoginRequiredMixin, CreateView):
         return reverse('show_profile', kwargs={'pk': self.object.profile.pk})
 
 class UpdatePostView(LoginRequiredMixin, UpdateView):
+    '''View to allow a user to update their own post caption'''
     model = Post
-    form_class = CreatePostForm 
+    form_class = CreatePostForm # We can reuse the Create form since it just has 'caption'
     template_name = 'project/update_post_form.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Security Check: 
+        Get the post object and verify that the logged-in user 
+        is the owner of the profile associated with this post.
+        """
+        post = self.get_object()
+        
+        # If the user is trying to edit someone else's post, redirect them away
+        if post.profile.user != self.request.user:
+            return redirect('show_post', pk=post.pk)
+            
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        """Return to the post detail page after saving"""
+        return reverse('show_post', kwargs={'pk': self.object.pk})
 
 class DeletePostView(LoginRequiredMixin, DeleteView):
     model = Post

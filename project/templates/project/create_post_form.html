@@ -7,6 +7,7 @@
 {% block content %}
 <div class="form-container">
     <h2>Create Post</h2>
+    
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         
@@ -16,10 +17,10 @@
 
         {{ form.as_p }}
 
-        {% if 'create_post' in request.path %}
+        <div style="margin: 15px 0;">
             <label>Photos:</label>
             <input type="file" name="image_files" multiple>
-        {% endif %}
+        </div>
 
         <button type="submit">Save</button>
     </form>

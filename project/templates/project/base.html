@@ -37,7 +37,7 @@
                         <li><a href="{% url 'match_requests' %}">Requests</a></li>
                         
                         <li><a href="{% url 'show_profile' request.user.project_profiles.first.pk %}">My Profile</a></li>
-                        <li><a href="{% url 'create_post' %}">Post Update</a></li>
+                        <li><a href="{% url 'create_post' %}">Create Post</a></li>
                         <li>
                             <form action="{% url 'logout' %}" method="post" style="display: inline;">
                                 {% csrf_token %}

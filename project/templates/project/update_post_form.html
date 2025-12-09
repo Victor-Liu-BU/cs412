@@ -1,0 +1,28 @@
+<!-- mini_insta/templates/mini_insta/update_post_form.html -->
+<!-- Ting Shing Liu, 10/10/25 -->
+<!-- Update Post Page template for the mini insta webpage -->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Update Post</h2>
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        {% if user_form %}
+            {{ user_form.as_p }}
+        {% endif %}
+
+        {{ form.as_p }}
+
+        <div style="margin: 15px 0;">
+            <label>Photos:</label>
+            <input type="file" name="image_files" multiple>
+        </div>
+
+        <button type="submit">Save</button>
+    </form>
+</div>
+{% endblock %}
