@@ -1,0 +1,19 @@
+<!--project/templates/project/advice_list.html-->
+<!--Ting Shing Liu, 12/9/25-->
+<!--Template for displaying a list of dating advice-->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h2>Relationship Advice for CS Majors</h2>
+<ul>
+    {% for advice in advice_list %}
+        <li style="margin-bottom: 20px;">
+            <blockquote>"{{ advice.text }}"</blockquote>
+            <cite>- {{ advice.author }}</cite>
+        </li>
+    {% empty %}
+        <li>No advice available at the moment. Good luck!</li>
+    {% endfor %}
+</ul>
+{% endblock %}

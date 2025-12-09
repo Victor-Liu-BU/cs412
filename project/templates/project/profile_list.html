@@ -1,0 +1,25 @@
+<!--project/templates/project/profile_list.html-->
+<!--Ting Shing Liu, 12/9/25-->
+<!--Profile list template for my project-->
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h2>Find your Player 2</h2>
+<div class="grid-container">
+    {% for p in profiles %}
+        <div class="profile-card" style="border: 1px solid #ccc; padding: 10px; margin: 10px; display: inline-block;">
+            <a href="{% url 'show_profile' p.pk %}">
+                {% if p.profile_image_url %}
+                    <img src="{{ p.profile_image_url.url }}" alt="{{ p.name }}" style="max-width: 150px;">
+                {% else %}
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930" alt="No Image" style="max-width: 150px;">
+                {% endif %}
+                <h3>{{ p.name }}</h3>
+                <p>Age: {{ p.dob|timesince }}</p>
+            </a>
+        </div>
+    {% empty %}
+        <p>No profiles found yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

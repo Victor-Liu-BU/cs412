@@ -1,0 +1,27 @@
+<!--project/templates/project/create_post_form.html-->
+<!--Ting Shing Liu, 12/9/25-->
+<!--Create post form template for my project-->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Create Post</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        {% if user_form %}
+            {{ user_form.as_p }}
+        {% endif %}
+
+        {{ form.as_p }}
+
+        {% if 'create_post' in request.path %}
+            <label>Photos:</label>
+            <input type="file" name="image_files" multiple>
+        {% endif %}
+
+        <button type="submit">Save</button>
+    </form>
+</div>
+{% endblock %}

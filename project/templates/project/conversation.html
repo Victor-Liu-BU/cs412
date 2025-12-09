@@ -1,0 +1,34 @@
+<!--project/templates/project/conversation.html-->
+<!--Ting Shing Liu, 12/9/25-->
+<!--Template for the conversation page between two matched profiles-->
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="chat-container">
+    <h2>Conversation with 
+        {% if match.profile1 == my_profile %}
+            {{ match.profile2.name }}
+        {% else %}
+            {{ match.profile1.name }}
+        {% endif %}
+    </h2>
+
+    <div class="messages-window">
+        {% for message in messages %}
+            <div class="message {% if message.sender == my_profile %}sent{% else %}received{% endif %}">
+                <p class="msg-text">{{ message.text }}</p>
+                <span class="msg-time">{{ message.timestamp|date:"M d, g:i a" }}</span>
+            </div>
+        {% empty %}
+            <p class="no-msg">No messages yet. Say hello!</p>
+        {% endfor %}
+    </div>
+
+    <div class="message-input">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.text }} <button type="submit">Send</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

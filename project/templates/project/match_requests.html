@@ -1,0 +1,43 @@
+<!---->
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="requests-container" style="max-width: 600px; margin: 0 auto;">
+    <h2>Connection Requests</h2>
+    
+    {% for req in requests %}
+        <div class="request-card" style="border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
+            
+            <div class="requester-info" style="display: flex; align-items: center; gap: 10px;">
+                <a href="{% url 'show_profile' req.profile1.pk %}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: black;">
+                    {% if req.profile1.profile_image_url %}
+                        <img src="{{ req.profile1.profile_image_url.url }}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                    {% else %}
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: #ccc;"></div>
+                    {% endif %}
+                    <div>
+                        <strong>{{ req.profile1.name }}</strong><br>
+                        <small>Sent: {{ req.timestamp|timesince }} ago</small>
+                    </div>
+                </a>
+            </div>
+
+            <div class="request-actions">
+                <form action="{% url 'create_match' req.profile1.pk %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" style="background-color: #0095f6; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Accept</button>
+                </form>
+                
+                <form action="{% url 'decline_match' req.profile1.pk %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" style="background-color: #ed4956; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Decline</button>
+                </form>
+            </div>
+
+        </div>
+    {% empty %}
+        <p>No pending requests.</p>
+        <a href="{% url 'profile_list' %}">Go find a match!</a>
+    {% endfor %}
+</div>
+{% endblock %}

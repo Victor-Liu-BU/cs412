@@ -1,0 +1,55 @@
+<!--project/templates/project/base.html-->
+<!--Ting Shing Liu, 12/9/25-->
+<!--Base html page for my project-->
+{% load static %}
+<html>
+    <head>
+        <title>CS Dating App</title>
+        <link rel="stylesheet" href="{% static 'styles-mini-insta.css' %}">
+    </head>
+    <body>
+        <header>
+            <div class="header-content">
+                <h1>
+                    {% if profile and profile.user != request.user %}
+                        User: {{profile.name}}
+                    {% elif request.user.is_authenticated %}
+                        Welcome, {{ request.user.username }}
+                    {% else %}
+                        CS Major Dating App
+                    {% endif %}
+                </h1>
+            </div>
+        </header>
+
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <footer>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'profile_list' %}">Browse Profiles</a></li>
+                    <li><a href="{% url 'show_advice' %}">Dating Advice</a></li>
+                    
+                    {% if request.user.is_authenticated %}
+                        <li><a href="{% url 'match_requests' %}">Requests</a></li>
+                        
+                        <li><a href="{% url 'show_profile' request.user.project_profiles.first.pk %}">My Profile</a></li>
+                        <li><a href="{% url 'create_post' %}">Post Update</a></li>
+                        <li>
+                            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="action-button">Log out</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Log in</a></li>
+                        <li><a href="{% url 'create_profile' %}">Sign Up</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </footer>
+    </body>
+</html>

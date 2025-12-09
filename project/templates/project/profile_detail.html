@@ -1,0 +1,91 @@
+<!--project/templates/project/profile_detail.html-->
+<!--Ting Shing Liu, 12/9/25-->
+<!--Template for the profile detail page-->
+{% extends 'project/base.html' %}
+{% block content %}
+
+<main>
+    <article class="profile-bio">
+        {% if profile.profile_image_url %}
+            <img class="profile-pic" src="{{ profile.profile_image_url.url }}" alt="{{ profile.name }}">
+        {% else %}
+            <img class="profile-pic" src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930" alt="No Image">
+        {% endif %}
+        
+        <div class="profile-info">
+            <h2>{{ profile.name }}</h2>
+            
+            <div class="profile-stats">
+                <span><strong>Age:</strong> {{ profile.dob|timesince }} old</span>
+                <span><strong>Joined:</strong> {{ profile.user.date_joined|date:"Y" }}</span>
+            </div>
+
+            <p>{{ profile.bio_text|linebreaks }}</p>
+
+            <div class="profile-actions" style="margin-top: 20px;">
+                {% if request.user == profile.user %}
+                    <a href="{% url 'update_profile' %}" class="action-button">Update Profile</a>
+                    <a href="{% url 'match_requests' %}" class="action-button" style="background-color: #6c757d;">View Requests</a>
+                
+                {% elif request.user.is_authenticated %}
+                    
+                    {% if not match %}
+                        <form action="{% url 'create_match' profile.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="action-button follow-button">Connect ❤</button>
+                        </form>
+
+                    {% elif match.status %}
+                        <p style="color: #e91e63; font-weight: bold;">❤ It's a Match!</p>
+                        <a href="{% url 'show_conversation' match.pk %}" class="action-button">Send Message</a>
+
+                    {% elif i_am_sender %}
+                        <button disabled class="action-button" style="background-color: grey; cursor: default;">Request Sent...</button>
+
+                    {% else %}
+                        <p><strong>{{ profile.name }}</strong> wants to connect!</p>
+                        
+                        <div style="display: flex; gap: 10px;">
+                            <form action="{% url 'create_match' profile.pk %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="action-button follow-button">Accept</button>
+                            </form>
+
+                            <form action="{% url 'decline_match' profile.pk %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="action-button unfollow-button">Decline</button>
+                            </form>
+                        </div>
+                    {% endif %}
+
+                {% endif %}
+            </div>
+        </div>
+    </article>
+
+    <article class="posts-section">
+        <h2>Posts</h2>
+        
+        <div class="grid-container">
+            {% for post in profile.get_all_posts %}
+                {% with first_photo=post.get_all_photos.first %}
+                    <div class="grid-item">
+                        <a href="{% url 'show_post' post.pk %}">
+                            {% if first_photo %}
+                                <img src="{{ first_photo.get_image_url }}" alt="{{ post.caption }}">
+                            {% else %}
+                                <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#f0f0f0; padding:10px;">
+                                    <p style="font-size: 12px; color: #333;">{{ post.caption|truncatechars:30 }}</p>
+                                </div>
+                            {% endif %}
+                        </a>
+                    </div>
+                {% endwith %}
+            {% empty %}
+                <p>No posts yet.</p>
+            {% endfor %}
+        </div>
+    </article>
+</main>
+
+{% endblock %}

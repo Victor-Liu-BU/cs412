@@ -1,0 +1,23 @@
+<!-- project/templates/project/login.html -->
+<!-- Ting Shing Liu, 12/9/25-->
+<!-- Login Page Template for our project-->
+{% extends 'project/base.html' %}
+ 
+{% block content %}
+<h1>Login</h1>
+<form method="post" action="{% url 'login' %}" >
+    {% csrf_token %}
+    {{form}}
+    
+    {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{request.GET.next}}">
+    {% else %}
+        <input type="hidden" name="next" value="{% url 'profile_list' %}">
+    {% endif %}
+    
+    <input type="submit" value="Login">
+</form>
+ 
+<hr>
+Don't have an account? <a href="{% url 'create_profile' %}">Create Here</a>.
+{% endblock %}
