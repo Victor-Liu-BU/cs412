@@ -1,5 +1,7 @@
 # project/forms.py
 # Ting Shing Liu, 12/08/25
+# Define the forms that we use for create/update/delete operations
+
 from django import forms
 from .models import *
 from django.contrib.auth.models import User
@@ -38,7 +40,7 @@ class CreateMessageForm(forms.ModelForm):
                 'autocomplete': 'off'
             }),
         }
-        # Hide the label so it looks like a real chat app
+        # Hide the label
         labels = {
             'text': '',
         }

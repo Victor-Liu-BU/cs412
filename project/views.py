@@ -1,6 +1,8 @@
 # project/views.py
 # Ting Shing Liu, 12/08/25
-from django.shortcuts import render, redirect, get_object_or_404
+# Define the views that we use for our project app
+
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Profile, Post, Photo, Match, Message, Advice
 from .forms import CreatePostForm, UpdateProfileForm, CreateProfileForm, CreateMessageForm
@@ -11,8 +13,6 @@ from django.contrib.auth import login
 from django.views import View
 from django.db.models import Q
 from datetime import date
-
-# --- Profile Views ---
 
 class ProfileListView(ListView):
     '''View to display a list of all Profiles with Age Filtering'''
@@ -70,7 +70,7 @@ class ProfileDetailView(DetailView):
                 context['match'] = match
                 
                 # Helper logic for the template:
-                # Did *I* start this request?
+                # Did I start this request?
                 if match and match.profile1 == viewer:
                     context['i_am_sender'] = True
                 else:
@@ -117,7 +117,7 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('show_profile', kwargs={'pk': self.object.pk})
 
-# --- Post & Photo Views ---
+# Post & Photo Views
 
 class PostListView(LoginRequiredMixin, ListView):
     '''Show a public feed of posts'''
@@ -184,7 +184,7 @@ class DeletePostView(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         return reverse('show_profile', kwargs={'pk': self.object.profile.pk})
 
-# --- Match & Message Views ---
+# Match & Message Views 
 
 class CreateMatchView(LoginRequiredMixin, View):
     '''Logic to create a Match request OR Accept an existing one.'''
@@ -200,14 +200,14 @@ class CreateMatchView(LoginRequiredMixin, View):
             ).first()
 
             if not existing_match:
-                # FIX 2: Create as FALSE (Pending). Not True.
+                # No existing match -> Create a new pending match request
                 Match.objects.create(
                     profile1=my_profile, # Initiator
                     profile2=profile_to_match, # Receiver
                     status=False # Pending
                 )
             elif existing_match.profile2 == my_profile and existing_match.status == False:
-                # FIX 2 (Continued): If they asked me, AND I click accept -> Set True
+                # If they asked me, AND I click accept -> Set True
                 existing_match.status = True 
                 existing_match.save()
             
@@ -261,7 +261,7 @@ class ConversationView(LoginRequiredMixin, View):
     def get(self, request, pk):
         match = Match.objects.get(pk=pk)
         
-        # FIX 1: Define user_profile so we can use it in context
+        # Define user_profile so we can use it in context
         user_profile = Profile.objects.get(user=request.user)
 
         # Security check: Ensure status is True
@@ -296,7 +296,7 @@ class ConversationView(LoginRequiredMixin, View):
             form.save()
         return redirect('show_conversation', pk=pk)
 
-# --- Advice Views ---
+# Advice Views 
 
 class AdviceListView(ListView):
     '''Display generic dating advice'''

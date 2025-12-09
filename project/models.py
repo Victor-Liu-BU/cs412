@@ -1,5 +1,7 @@
 # project/models.py
 # Ting Shing Liu, 11/25/25
+# Define the models that we use for our project app
+
 from django.db import models
 from django.urls import reverse 
 from django.contrib.auth.models import User
@@ -16,8 +18,6 @@ class Profile(models.Model):
 
     def __str__(self):
         '''return a string representation of this model instance '''
-        # FIX: Changed to use 'name' and 'user.username'
-        # Previous code referenced non-existent fields display_name/join_date
         return f'{self.name} ({self.user.username})'
     
     def get_all_posts(self):
