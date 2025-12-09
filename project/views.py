@@ -231,16 +231,29 @@ class DeclineMatchView(LoginRequiredMixin, View):
         return redirect('show_profile', pk=pk)
 
 class MatchRequestsListView(LoginRequiredMixin, ListView):
-    '''Show incoming connection requests'''
+    '''Show incoming connection requests AND active matches'''
     model = Match
     template_name = 'project/match_requests.html'
     context_object_name = 'requests'
 
     def get_queryset(self):
+        # 1. Incoming Requests: I am profile2, status is False
         my_profile = Profile.objects.get(user=self.request.user)
-        # Find matches where I am the receiver (profile2) and status is False
         return Match.objects.filter(profile2=my_profile, status=False)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        my_profile = Profile.objects.get(user=self.request.user)
+        
+        # 2. Active Matches: I am profile1 OR profile2, and status is True
+        active_matches = Match.objects.filter(
+            (Q(profile1=my_profile) | Q(profile2=my_profile)) & 
+            Q(status=True)
+        )
+        
+        context['matches'] = active_matches
+        context['my_profile'] = my_profile # Needed in template to identify the "other" person
+        return context
 class ConversationView(LoginRequiredMixin, View):
     '''Display messages in a match and handle sending new messages'''
     template_name = 'project/conversation.html'

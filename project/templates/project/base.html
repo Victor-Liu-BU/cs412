@@ -34,7 +34,7 @@
                     <li><a href="{% url 'show_advice' %}">Dating Advice</a></li>
                     
                     {% if request.user.is_authenticated %}
-                        <li><a href="{% url 'match_requests' %}">Requests</a></li>
+                        <li><a href="{% url 'match_requests' %}">Connection</a></li>
                         
                         <li><a href="{% url 'show_profile' request.user.project_profiles.first.pk %}">My Profile</a></li>
                         <li><a href="{% url 'create_post' %}">Create Post</a></li>
