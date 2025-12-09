@@ -1,0 +1,51 @@
+<!--project/templates/project/show_post.html-->
+<!--Ting Shing Liu, 12/9/25-->
+<!--Template for displaying a single post in detail-->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="post-container" style="max-width: 600px; margin: 20px auto; border: 1px solid #dbdbdb; background: white; border-radius: 3px;">
+    
+    <div class="post-header" style="padding: 15px; border-bottom: 1px solid #efefef; display: flex; align-items: center;">
+        <a href="{% url 'show_profile' post.profile.pk %}" style="text-decoration: none; color: black; font-weight: bold; display: flex; align-items: center;">
+            
+            {% if post.profile.profile_image_url %}
+                <img src="{{ post.profile.profile_image_url.url }}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px; object-fit: cover;">
+            {% else %}
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px; object-fit: cover;">
+            {% endif %}
+            
+            {{ post.profile.name }}
+        </a>
+        <span style="color: #8e8e8e; font-size: 12px; margin-left: auto;">{{ post.timestamp }}</span>
+    </div>
+
+    <div class="post-images">
+        {% for photo in post.get_all_photos %}
+            <div class="image-wrapper" style="width: 100%;">
+                <img src="{{ photo.get_image_url }}" alt="Post Image" style="width: 100%; display: block;">
+            </div>
+        {% empty %}
+            <div style="padding: 40px; text-align: center; background-color: #f0f0f0; color: #888;">
+                <p>(Text only post)</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="post-footer" style="padding: 15px;">
+        <p>
+            <strong><a href="{% url 'show_profile' post.profile.pk %}" style="text-decoration: none; color: black;">{{ post.profile.name }}</a></strong> 
+            {{ post.caption }}
+        </p>
+
+        {% if request.user == post.profile.user %}
+            <div class="post-actions" style="margin-top: 15px; border-top: 1px solid #efefef; padding-top: 10px;">
+                <a href="{% url 'update_post' post.pk %}" style="color: #0095f6; text-decoration: none; margin-right: 15px; font-weight: bold;">Edit Caption</a>
+                <a href="{% url 'delete_post' post.pk %}" style="color: #ed4956; text-decoration: none; font-weight: bold;">Delete Post</a>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
